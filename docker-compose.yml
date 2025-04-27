@@ -1,0 +1,100 @@
+# Specify the Docker Compose file format version. Version 3.8 is recommended.
+version: '3.8'
+
+# Define the services (containers) that make up your application stack.
+services:
+  # Service 1: Your PHP/Apache web application
+  app:
+    # Build the image using the Dockerfile in the current directory (.)
+    # This refers to the Dockerfile we created earlier.
+    build: .
+    # Name the container for easier reference (optional)
+    container_name: jv-php-app
+    # Map port 8080 on your host machine to port 80 in the container (Apache's default)
+    # You'll access your site at http://localhost:8080
+    ports:
+      - "8080:80"
+    # Mount the current directory (.) on your host to /var/www/html in the container
+    # This allows you to edit code locally and see changes reflected without rebuilding.
+    volumes:
+      - ./:/var/www/html
+    # Link this service to the 'db' service. Ensures 'db' starts before 'app'.
+    depends_on:
+      - db
+    # Define environment variables available to your PHP application (config/db.php)
+    # These values will be pulled from the .env file in the same directory.
+    environment:
+      DB_HOST: db                  # The hostname of the database service (defined below)
+      DB_DATABASE: ${MYSQL_DATABASE} # Use the value from .env
+      DB_USER: ${MYSQL_USER}         # Use the value from .env
+      DB_PASSWORD: ${MYSQL_PASSWORD} # Use the value from .env
+    # Connect this service to the custom network defined below
+    networks:
+      - app-network
+
+  # Service 2: MySQL Database
+  db:
+    # Use an official MySQL image (version 8.0 specified here)
+    image: mysql:8.0
+    # Name the container (optional)
+    container_name: jv-mysql-db
+    # Restart policy: always restart the container if it stops
+    restart: always
+    # Environment variables required by the MySQL image to initialize the database.
+    # These values MUST be set in your .env file.
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} # Pulled from .env
+      MYSQL_DATABASE: ${MYSQL_DATABASE}         # Pulled from .env
+      MYSQL_USER: ${MYSQL_USER}                 # Pulled from .env
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}         # Pulled from .env
+    # Volumes for data persistence and initialization:
+    volumes:
+      # Mount a named volume 'db_data' to persist database files across container restarts.
+      - db_data:/var/lib/mysql
+      # Mount your local initDB directory into a special directory in the container.
+      # SQL files here (.sql, .sh) are executed when the database container starts for the first time.
+      - ./initDB:/docker-entrypoint-initdb.d
+    # Expose MySQL port only to other services on the same network (not the host machine)
+    expose:
+      - '3306'
+    # Connect this service to the custom network
+    networks:
+      - app-network
+
+  # Service 3: phpMyAdmin (Web UI for MySQL)
+  phpmyadmin:
+    # Use the official phpMyAdmin image
+    image: phpmyadmin/phpmyadmin
+    # Name the container (optional)
+    container_name: jv-phpmyadmin-ui
+    # Restart policy
+    restart: always
+    # Map port 8081 on your host to port 80 in the container
+    # You'll access phpMyAdmin at http://localhost:8081
+    ports:
+      - "8081:80"
+    # Link this service to the 'db' service
+    depends_on:
+      - db
+    # Environment variables for phpMyAdmin to connect to the database service
+    environment:
+      PMA_HOST: db # Tells phpMyAdmin the hostname of the database service ('db')
+      PMA_PORT: 3306 # The internal port the database service is listening on
+      # You can optionally set MYSQL_ROOT_PASSWORD here too if needed for root login via PMA
+      # MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} # Pulled from .env
+    # Connect this service to the custom network
+    networks:
+      - app-network
+
+# Define the custom network for inter-service communication
+# Services on the same network can reach each other using their service names (e.g., 'app', 'db').
+networks:
+  app-network:
+    driver: bridge # Use the default bridge network driver
+
+# Define the named volume for persistent database storage
+# This ensures your database data isn't lost when the 'db' container is removed or recreated.
+volumes:
+  db_data:
+    driver: local # Use the default local volume driver
+
