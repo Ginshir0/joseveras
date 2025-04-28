@@ -1,0 +1,132 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Define your core color palette */
+  --clr-primary: #7FDCD6 ;
+  --clr-secondary: #DE9AF4; /* #7FFFD4 */
+  --clr-white: #FFFFFF;
+  --clr-dark: #1C1C1C; /* Base dark color */
+
+  /* --- Light Mode Theme (Default) --- */
+  /* Define semantic variables based on the palette */
+  --bg-color: var(--clr-white);       /* White background */
+  --text-color: var(--clr-dark);      /* Dark text for contrast */
+  --accent-color: var(--clr-primary); /* Primary color for accents */
+  --secondary-accent-color: var(--clr-secondary);
+
+  /* You might define more specific uses */
+  --button-bg: var(--clr-primary);
+  --button-text: var(--clr-white);
+  --link-color: var(--clr-secondary);
+}
+
+/* styles.css */
+
+/* Add this block after your :root definitions */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* --- Dark Mode Theme --- */
+    /* Redefine semantic variables for dark mode */
+    --bg-color: var(--clr-dark);       /* Use the dark color for background */
+    --text-color: var(--clr-white);    /* Use white for text */
+
+    /* You might adjust accent colors for better contrast/aesthetics in dark mode */
+    /* For example, maybe use the lighter colors more prominently */
+    --accent-color: var(--clr-primary); /* Swapping accents for example */
+    --secondary-accent-color: var(--clr-secondary);
+    --link-color: var(--clr-primary);
+    --button-bg: var(--clr-secondary);
+    --button-text: var(--clr-dark); /* Use dark text on the lighter secondary button */
+  }
+}
+
+main {
+  flex: 1; /* Allow main to grow and fill available space */
+  display: flex;
+  flex-direction: column;
+
+}
+
+body {
+  min-height: 100vh; /* Ensure body takes full height */
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3 {
+  color: var(--accent-color); /* Use primary color for headings */
+}
+
+a {
+  color: var(--link-color); /* Use secondary color for links */
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+  color: var(--accent-color); /* Change link color on hover */
+  transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.button {
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  opacity: 0.9; /* Slight hover effect */
+}
+
+header {
+  background-image: url('../images/homeBanner.svg'); /* Example header image */
+  background-size: cover ;
+  color: var(--text-color);
+  display: flex;
+  padding: 20px;
+  text-align: center;
+  justify-content: center;
+}
+
+#main-nav  ul {
+  display: flex;
+  list-style: none;
+  gap: 2rem; /* Space between items */
+}
+
+#main-nav ul li a {
+  font-size: 1.7rem; /* Increase as needed */
+  font-weight: 500;  /* Optional: make links a bit bolder */
+}
+
+#main-footer {
+  background-color: var(--text-color);
+  color: var(--bg-color);
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid var(--accent-color); /* Example of using accent color */
+}
+
+#main-footer svg {
+  fill: var(--accent-color); /* Replace with your desired color */
+}
+
+.footer-icon {
+  width: 2.5rem; /* Adjust size as needed */
+  height: 2.5rem; /* Adjust size as needed */
+  fill: var(--accent-color);
+}
