@@ -1,0 +1,27 @@
+# Ignore environment variable files
+.env
+
+# Ignore log files
+*.log
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore Docker named volumes (if mapped to local folders)
+db_data/
+
+# Ignore IDE/project files
+.vscode/
+.idea/
+
+# Ignore compiled files
+*.swp
+*.swo
+
+# Ignore cache
+cache/
+*.cache
+
+# Ignore uploads or user-generated content (if any)
+uploads/
