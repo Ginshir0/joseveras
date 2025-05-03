@@ -18,6 +18,7 @@ services:
     # This allows you to edit code locally and see changes reflected without rebuilding.
     volumes:
       - ./:/var/www/html
+      - ./uploads:/var/www/html/uploads
     # Link this service to the 'db' service. Ensures 'db' starts before 'app'.
     depends_on:
       - db

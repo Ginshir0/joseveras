@@ -75,7 +75,7 @@ a {
 
 a:hover {
   text-decoration: none;
-  color: var(--accent-color); /* Change link color on hover */
+  color: var(--secondary-accent-color); /* Change link color on hover */
   transition: color 0.3s ease; /* Smooth transition for hover effect */
 }
 
@@ -95,7 +95,6 @@ a:hover {
 header {
   background-image: url('../images/homeBanner.svg'); /* Example header image */
   background-size: cover ;
-  color: var(--text-color);
   display: flex;
   padding: 20px;
   text-align: center;
@@ -130,4 +129,98 @@ header {
 
 .footer-icon:hover {
   fill: var(--secondary-accent-color);
+}
+main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: 3rem;
+  background: linear-gradient(135deg, var(--accent-color), var(--secondary-accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 2rem;
+}
+
+.motivation-quote {
+  background: linear-gradient(135deg, rgba(127, 220, 214, 0.1), rgba(222, 154, 244, 0.1));
+  border-left: 4px solid var(--accent-color);
+  padding: 2rem;
+  margin: 2rem 0;
+  border-radius: 0 8px 8px 0;
+}
+
+#featured-project {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  margin-top: 3rem;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Projects grid and card styles */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255,255,255,0.7);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  padding: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 1.5px solid var(--accent-color);
+}
+
+.project-card:hover {
+  box-shadow: 0 6px 24px rgba(127,220,214,0.18);
+  transform: translateY(-4px) scale(1.02);
+  border-color: var(--secondary-accent-color);
+}
+
+.project-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.project-card h3 {
+  margin: 0.5rem 0 0.7rem 0;
+  color: var(--accent-color);
+}
+
+.project-card p {
+  color: var(--text-color);
+  font-size: 1rem;
+  margin: 0;
+}
+
+.project-card-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-admin-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.7rem;
 }

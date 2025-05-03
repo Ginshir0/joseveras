@@ -1,0 +1,67 @@
+.admin-sign-in-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-color);
+}
+
+.admin-sign-in-container {
+  background: var(--clr-white);
+  color: var(--clr-dark);
+  padding: 2.5rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1.5px 6px rgba(0,0,0,0.03);
+  min-width: 320px;
+  max-width: 90vw;
+}
+
+.admin-sign-in-container h2 {
+  margin-bottom: 1.5rem;
+  color: var(--accent-color);
+  text-align: center;
+}
+
+.admin-sign-in-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.admin-sign-in-form label {
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.admin-sign-in-form input[type="text"],
+.admin-sign-in-form input[type="password"] {
+  padding: 0.7rem 1rem;
+  border: 1.5px solid var(--accent-color);
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #f8f8f8;
+  transition: border-color 0.2s;
+}
+
+.admin-sign-in-form input:focus {
+  outline: none;
+  border-color: var(--secondary-accent-color);
+}
+
+.admin-sign-in-form .button {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.admin-sign-in-error {
+  background: #ffeaea;
+  color: #b80000;
+  border: 1px solid #ffb3b3;
+  border-radius: 5px;
+  padding: 0.7rem 1rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  font-size: 1rem;
+}

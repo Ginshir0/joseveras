@@ -14,6 +14,10 @@ RUN docker-php-ext-install pdo_mysql
 # /var/www/html is the default web root for Apache in this image.
 WORKDIR /var/www/html
 
+# --- Create Uploads Folder ---
+# Create the uploads folder and set permissions during the image build.
+RUN mkdir -p /var/www/html/uploads && chown www-data:www-data /var/www/html/uploads && chmod 755 /var/www/html/uploads
+
 # --- Copy Application Files ---
 # Copy the contents of the current directory (where the Dockerfile is)
 # into the container's working directory (/var/www/html).
