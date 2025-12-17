@@ -1,54 +1,58 @@
 <?php
-session_start();
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header('Location: /pages/adminSignIn.php');
-    exit;
-}
+require_once __DIR__ . '/../config/auth.php';
 require_once __DIR__ . '/../config/db.php';
-include __DIR__ . '/../include/header.php';
+require_once __DIR__ . '/../config/csrf.php';
+require_once __DIR__ . '/../config/upload.php';
+
+require_admin();
 
 $error = '';
-$success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title = trim($_POST['title'] ?? '');
-    $description = trim($_POST['description'] ?? '');
-    $is_featured = isset($_POST['is_featured']) ? 1 : 0;
-    $image_filename = '';
+    // Verify CSRF token
+    if (!csrf_verify()) {
+        $error = 'Invalid request. Please try again.';
+    } else {
+        $title = trim($_POST['title'] ?? '');
+        $description = trim($_POST['description'] ?? '');
+        $is_featured = isset($_POST['is_featured']) ? 1 : 0;
+        $image_filename = '';
 
-    // Handle image upload
-    if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = __DIR__ . '/../uploads/';
-        $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
-        $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-        if (!in_array($ext, $allowed)) {
-            $error = 'Invalid image file type.';
-        } else {
-            $image_filename = uniqid('proj_', true) . '.' . $ext;
-            if (!move_uploaded_file($_FILES['image']['tmp_name'], $upload_dir . $image_filename)) {
-                $error = 'Failed to upload image.';
+        // Handle image upload with secure validation
+        if (isset($_FILES['image'])) {
+            $upload_result = handle_image_upload(
+                $_FILES['image'],
+                __DIR__ . '/../uploads/'
+            );
+            
+            if (!$upload_result['success']) {
+                $error = $upload_result['error'];
+            } elseif ($upload_result['filename']) {
+                $image_filename = $upload_result['filename'];
             }
         }
-    }
 
-    if ($title === '') {
-        $error = 'Title is required.';
-    } elseif (!$error) {
-        try {
-            if ($is_featured) {
-                $pdo->exec("UPDATE projects SET is_featured = 0 WHERE is_featured = 1");
+        if ($title === '') {
+            $error = 'Title is required.';
+        } elseif (!$error) {
+            try {
+                if ($is_featured) {
+                    $pdo->exec("UPDATE projects SET is_featured = 0 WHERE is_featured = 1");
+                }
+                $stmt = $pdo->prepare("INSERT INTO projects (title, description, image_url, is_featured) VALUES (?, ?, ?, ?)");
+                $stmt->execute([$title, $description, $image_filename, $is_featured]);
+                set_flash('success', 'Project added successfully.');
+                header('Location: /pages/projects.php');
+                exit;
+            } catch (PDOException $e) {
+                error_log("Add project error: " . $e->getMessage());
+                $error = 'Error adding project.';
             }
-            $stmt = $pdo->prepare("INSERT INTO projects (title, description, image_url, is_featured) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$title, $description, $image_filename, $is_featured]);
-            $success = 'Project added successfully.';
-            header('Location: /pages/projects.php');
-            exit;
-        } catch (PDOException $e) {
-            error_log("Add project error: " . $e->getMessage());
-            $error = 'Error adding project.';
         }
     }
 }
+
+include __DIR__ . '/../include/header.php';
 ?>
 
 <main>
@@ -57,7 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php if ($error): ?>
             <p class="error-message"><?php echo htmlspecialchars($error); ?></p>
         <?php endif; ?>
-        <form method="post" class="admin-sign-in-form" autocomplete="off" enctype="multipart/form-data">
+        <form method="post" class="admin-sign-in-form" autocomplete="off" enctype="multipart/form-data" id="add-project-form">
+            <?php echo csrf_field(); ?>
             <label for="title">Title*</label>
             <input type="text" name="title" id="title" required>
 
@@ -66,6 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <label for="image">Project Image</label>
             <input type="file" name="image" id="image" accept="image/*">
+            <div id="image-size-error" style="color:#b80000; margin-bottom:0.5rem; display:none;"></div>
 
             <label>
                 <input type="checkbox" name="is_featured" value="1"> Feature this project
@@ -76,5 +82,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <p style="margin-top:1rem;"><a href="/pages/projects.php">&larr; Back to Projects</a></p>
     </div>
 </main>
+
+<script>
+document.getElementById('image').addEventListener('change', function(e) {
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    const file = this.files[0];
+    const errorDiv = document.getElementById('image-size-error');
+    if (file && file.size > maxSize) {
+        errorDiv.textContent = "Image file size must be 2MB or less.";
+        errorDiv.style.display = "block";
+        this.value = "";
+    } else {
+        errorDiv.textContent = "";
+        errorDiv.style.display = "none";
+    }
+});
+
+document.getElementById('add-project-form').addEventListener('submit', function(e) {
+    const imageInput = document.getElementById('image');
+    const file = imageInput.files[0];
+    const maxSize = 2 * 1024 * 1024; // 2MB
+    if (file && file.size > maxSize) {
+        e.preventDefault();
+        document.getElementById('image-size-error').textContent = "Image file size must be 2MB or less.";
+        document.getElementById('image-size-error').style.display = "block";
+    }
+});
+</script>
 
 <?php include __DIR__ . '/../include/footer.php'; ?>

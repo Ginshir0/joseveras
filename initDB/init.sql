@@ -24,10 +24,15 @@ CREATE TABLE IF NOT EXISTS `admins` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Timestamp when the admin user was created'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Table to store admin user credentials';
 
-
-INSERT IGNORE INTO `admins` (`username`, `password_hash`) VALUES (
-    'jveras', 
-    '$2y$10$8/cPpxhb0dq7hJr/IN7Md.B6OjI.jjYzLRzMsAsZBqaZLeCCcHfoS'
-);
+-- --- Create Login Attempts Table ---
+-- Tracks failed login attempts for brute-force protection
+CREATE TABLE IF NOT EXISTS `login_attempts` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique identifier for the attempt',
+    `username` VARCHAR(50) NOT NULL COMMENT 'Username that was attempted',
+    `ip_address` VARCHAR(45) NOT NULL COMMENT 'IP address of the attempt (supports IPv6)',
+    `attempted_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'When the attempt occurred',
+    INDEX `idx_username_time` (`username`, `attempted_at`),
+    INDEX `idx_ip_time` (`ip_address`, `attempted_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Table to track failed login attempts';
 
 -- End of initialization script

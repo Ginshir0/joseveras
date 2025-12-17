@@ -1,6 +1,9 @@
 <?php
-session_start();
+require_once __DIR__ . '/../config/auth.php';
 require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../config/csrf.php';
+
+init_session();
 include __DIR__ . '/../include/header.php';
 
 // Fetch all projects
@@ -18,7 +21,8 @@ try {
 <main>
     <div class="content-wrapper">
         <h1>My Projects</h1>
-        <?php if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true): ?>
+        <?php echo render_flash(); ?>
+        <?php if (is_admin()): ?>
             <div style="margin-bottom: 2rem;">
                 <a href="/pages/addProject.php" class="button">Add Project</a>
             </div>
@@ -40,10 +44,11 @@ try {
                                 <p><?php echo nl2br(htmlspecialchars(substr($project['description'], 0, 120))); ?><?php if (strlen($project['description']) > 120) echo '...'; ?></p>
                             <?php endif; ?>
                         </a>
-                        <?php if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true): ?>
+                        <?php if (is_admin()): ?>
                             <div class="project-admin-actions">
                                 <a href="/pages/editProject.php?id=<?php echo htmlspecialchars($project['id']); ?>" class="button" style="margin-right: 0.5rem;">Edit</a>
                                 <form method="post" action="/pages/deleteProject.php" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                    <?php echo csrf_field(); ?>
                                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($project['id']); ?>">
                                     <button type="submit" class="button" style="background:#b80000; color:white;">Delete</button>
                                 </form>

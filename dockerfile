@@ -24,11 +24,17 @@ RUN mkdir -p /var/www/html/uploads && chown www-data:www-data /var/www/html/uplo
 # This includes your PHP files, css, images, include, config, etc.
 COPY . .
 
+# --- Copy virtual host configuration ---
+COPY docker/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
+
 # --- Optional: Set Permissions ---
 # The base php:apache image usually handles permissions correctly for /var/www/html.
 # If you encounter permission issues, you might need to uncomment and adjust the following lines:
 # RUN chown -R www-data:www-data /var/www/html
 # RUN chmod -R 755 /var/www/html
+
+# --- Enable mod_rewrite for URLs ---
+RUN a2enmod rewrite
 
 # --- Expose Port ---
 # Inform Docker that the container listens on port 80 (Apache's default HTTP port).

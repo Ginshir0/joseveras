@@ -3,6 +3,8 @@ session_start();
 require_once __DIR__ . '/../config/db.php';
 include __DIR__ . '/../include/header.php';
 
+// TODO: Validate and sanitize project ID from query string.
+
 // Get project ID from query string
 $project_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $project = null;

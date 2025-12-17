@@ -23,7 +23,7 @@
   /* You might define more specific uses */
   --button-bg: var(--clr-primary);
   --button-text: var(--clr-white);
-  --link-color: var(--clr-secondary);
+  --link-color: var(--clr-primary);
 }
 
 /* styles.css */
@@ -121,8 +121,8 @@ header {
 }
 
 .footer-icon {
-  width: 3.5rem; /* Adjust size as needed */
-  height: 3.5rem; /* Adjust size as needed */
+  width: 3rem; /* Adjust size as needed */
+  height: 3rem; /* Adjust size as needed */
   fill: var(--accent-color);
   transition: fill 0.3s ease; /* Ensure smooth transition */
 }
@@ -223,4 +223,37 @@ h1 {
   justify-content: flex-end;
   gap: 0.5rem;
   margin-top: 0.7rem;
+}
+
+/* Flash messages */
+.success-message {
+  background: linear-gradient(135deg, rgba(127, 220, 214, 0.2), rgba(127, 220, 214, 0.1));
+  border: 1px solid var(--accent-color);
+  border-left: 4px solid var(--accent-color);
+  color: var(--text-color);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0 8px 8px 0;
+  font-weight: 500;
+}
+
+.error-message {
+  background: linear-gradient(135deg, rgba(184, 0, 0, 0.15), rgba(184, 0, 0, 0.08));
+  border: 1px solid #b80000;
+  border-left: 4px solid #b80000;
+  color: #b80000;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0 8px 8px 0;
+  font-weight: 500;
+}
+
+.info-message {
+  background: linear-gradient(135deg, rgba(222, 154, 244, 0.15), rgba(222, 154, 244, 0.08));
+  border: 1px solid var(--secondary-accent-color);
+  border-left: 4px solid var(--secondary-accent-color);
+  color: var(--text-color);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0 8px 8px 0;
 }

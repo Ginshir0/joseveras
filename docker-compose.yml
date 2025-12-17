@@ -1,7 +1,5 @@
-# Specify the Docker Compose file format version. Version 3.8 is recommended.
-version: '3.8'
-
 # Define the services (containers) that make up your application stack.
+# Note: 'version' attribute is obsolete and no longer needed in modern Docker Compose.
 services:
   # Service 1: Your PHP/Apache web application
   app:
@@ -19,9 +17,10 @@ services:
     volumes:
       - ./:/var/www/html
       - ./uploads:/var/www/html/uploads
-    # Link this service to the 'db' service. Ensures 'db' starts before 'app'.
+    # Link this service to the 'db' service. Ensures 'db' is healthy before 'app' starts.
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     # Define environment variables available to your PHP application (config/db.php)
     # These values will be pulled from the .env file in the same directory.
     environment:
@@ -41,6 +40,13 @@ services:
     container_name: jv-mysql-db
     # Restart policy: always restart the container if it stops
     restart: always
+    # Healthcheck to ensure MySQL is ready before dependent services connect
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     # Environment variables required by the MySQL image to initialize the database.
     # These values MUST be set in your .env file.
     environment:
@@ -76,7 +82,8 @@ services:
       - "8081:80"
     # Link this service to the 'db' service
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     # Environment variables for phpMyAdmin to connect to the database service
     environment:
       PMA_HOST: db # Tells phpMyAdmin the hostname of the database service ('db')

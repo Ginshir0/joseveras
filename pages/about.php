@@ -1,4 +1,5 @@
 <?php
+// TODO: If dynamic content is added, ensure proper input/output sanitization.
 session_start();
 include __DIR__ . '/../include/header.php';
 ?>
