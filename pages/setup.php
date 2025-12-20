@@ -125,11 +125,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" id="username" name="username" required autofocus 
                    maxlength="25" 
                    value="<?php echo htmlspecialchars($username_value); ?>"
-                   placeholder="Enter username (max 25 characters)">
+                   placeholder="Enter Username">
 
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required
-                   placeholder="Min 12 chars, upper, lower, number, symbol">
+                   placeholder="Enter Password">
 
             <label for="confirm_password">Confirm Password</label>
             <input type="password" id="confirm_password" name="confirm_password" required
@@ -138,16 +138,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="button">Create Admin Account</button>
         </form>
         
-        <div style="margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 4px; font-size: 0.9rem;">
+        <div class="password-requirements" style="margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: 4px; font-size: 0.9rem;">
             <strong>Password Requirements:</strong>
-            <ul style="margin: 0.5rem 0 0 0; padding-left: 1.2rem; color: #666;">
-                <li>At least 12 characters</li>
-                <li>At least 1 uppercase letter</li>
-                <li>At least 1 lowercase letter</li>
-                <li>At least 1 number</li>
-                <li>At least 1 symbol</li>
+            <ul style="margin: 0.5rem 0 0 0; padding-left: 1.2rem; color: #666; list-style: none;">
+                <li data-check="length"><span class="req-icon" aria-hidden="true"></span>At least 12 characters</li>
+                <li data-check="uppercase"><span class="req-icon" aria-hidden="true"></span>At least 1 uppercase letter</li>
+                <li data-check="lowercase"><span class="req-icon" aria-hidden="true"></span>At least 1 lowercase letter</li>
+                <li data-check="number"><span class="req-icon" aria-hidden="true"></span>At least 1 number</li>
+                <li data-check="symbol"><span class="req-icon" aria-hidden="true"></span>At least 1 symbol</li>
             </ul>
         </div>
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var pw = document.getElementById('password');
+            if (!pw) return;
+            var reqs = Array.prototype.slice.call(document.querySelectorAll('.password-requirements [data-check]'));
+
+            function checkRule(rule, value) {
+                switch (rule) {
+                    case 'length': return value.length >= 12;
+                    case 'uppercase': return /[A-Z]/.test(value);
+                    case 'lowercase': return /[a-z]/.test(value);
+                    case 'number': return /[0-9]/.test(value);
+                    case 'symbol': return /[^A-Za-z0-9]/.test(value);
+                    default: return false;
+                }
+            }
+
+            function update() {
+                var v = pw.value || '';
+                reqs.forEach(function (li) {
+                    var rule = li.getAttribute('data-check');
+                    var ok = checkRule(rule, v);
+                    var icon = li.querySelector('.req-icon');
+                    if (ok) {
+                        li.classList.add('met');
+                        if (icon) {
+                            // simple checkmark SVG
+                            icon.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+                        }
+                    } else {
+                        li.classList.remove('met');
+                        if (icon) icon.innerHTML = '';
+                    }
+                });
+            }
+
+            pw.addEventListener('input', update);
+            update();
+        });
+        </script>
     </section>
 </main>
 
