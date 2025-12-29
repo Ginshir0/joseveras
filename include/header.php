@@ -1,13 +1,11 @@
 <?php
-// Start session at the very beginning, before any output
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// Initialize session with secure settings before output
+require_once __DIR__ . '/../config/db.php';
+require_once __DIR__ . '/../config/auth.php';
+init_session();
 
 // Check if initial setup is required (no admin users exist)
 // Redirect to setup page if needed (but not if already on setup page)
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../config/auth.php';
 
 $current_page = basename($_SERVER['PHP_SELF']);
 if ($current_page !== 'setup.php' && is_setup_required($pdo)) {

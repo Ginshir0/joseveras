@@ -1,6 +1,7 @@
 <?php
 // TODO: If dynamic content is added, ensure proper input/output sanitization.
-session_start();
+require_once __DIR__ . '/../config/auth.php';
+init_session();
 include __DIR__ . '/../include/header.php';
 ?>
 

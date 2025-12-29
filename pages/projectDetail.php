@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once __DIR__ . '/../config/auth.php';
+init_session();
 require_once __DIR__ . '/../config/db.php';
 include __DIR__ . '/../include/header.php';
 

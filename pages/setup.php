@@ -20,6 +20,7 @@ $username_value = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verify CSRF token
     if (!csrf_verify()) {
+        error_log('CSRF verify failed on setup: session_token ' . (isset($_SESSION['csrf_token']) ? 'present' : 'missing') . ', post_token ' . (isset($_POST['csrf_token']) ? 'present' : 'missing') . ', header_token ' . (isset($_SERVER['HTTP_X_CSRF_TOKEN']) ? 'present' : 'missing'));
         $errors[] = 'Invalid request. Please try again.';
     } else {
         $username = trim($_POST['username'] ?? '');
