@@ -23,6 +23,7 @@ $default_keywords = 'Jose Veras, DevOps, System Administrator, Docker, CI/CD, Li
 $page_title = isset($page_title) ? $page_title : $default_title;
 $page_description = isset($page_description) ? $page_description : $default_description;
 $page_keywords = isset($page_keywords) ? $page_keywords : $default_keywords;
+$page_robots = isset($page_robots) ? $page_robots : 'index, follow';
 
 // Build canonical URL
 $canonical_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -43,7 +44,7 @@ if (strpos($current_page, 'Detail') === false) {
     <meta name="description" content="<?php echo htmlspecialchars($page_description); ?>">
     <meta name="keywords" content="<?php echo htmlspecialchars($page_keywords); ?>">
     <meta name="author" content="Jose Veras">
-    <meta name="robots" content="index, follow">
+    <meta name="robots" content="<?php echo htmlspecialchars($page_robots); ?>">
     <link rel="canonical" href="<?php echo htmlspecialchars($canonical_url); ?>">
     <meta name="theme-color" content="#7FDCD6">
     

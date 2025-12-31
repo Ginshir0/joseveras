@@ -268,3 +268,31 @@ h1 {
   margin-bottom: 1.5rem;
   border-radius: 0 8px 8px 0;
 }
+
+/* 404 Error Page */
+.error-page {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.error-page .error-code {
+  font-size: 8rem;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.error-page .error-text {
+  font-size: 1.5rem;
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+}
+
+.error-page p {
+  margin-bottom: 2rem;
+}
+
+.error-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
