@@ -34,7 +34,7 @@ if ($project_id > 0) {
         <?php else: ?>
             <h1><?php echo htmlspecialchars($project['title']); ?></h1>
             <?php if (!empty($project['image_url'])): ?>
-                <img src="/uploads/<?php echo htmlspecialchars($project['image_url']); ?>" alt="<?php echo htmlspecialchars($project['title']); ?>" style="max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 1.5rem;">
+                <img src="/uploads/<?php echo htmlspecialchars($project['image_url']); ?>" alt="<?php echo htmlspecialchars($project['title']); ?>" class="project-banner">
             <?php endif; ?>
             <?php if (!empty($project['description'])): ?>
                 <p><?php echo nl2br(htmlspecialchars($project['description'])); ?></p>

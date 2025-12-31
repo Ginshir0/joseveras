@@ -95,6 +95,7 @@ include __DIR__ . '/../include/header.php';
                     </div>
                 <?php endif; ?>
                 <input type="file" name="image" id="image" accept="image/*">
+                <small style="display:block; color: var(--text-color); opacity: 0.7; margin-bottom: 0.5rem;">Recommended: 1920×480px or any 4:1 ratio image for best banner display.</small>
 
                 <label>
                     <input type="checkbox" name="is_featured" value="1" <?php if ($project['is_featured']) echo 'checked'; ?>> Feature this project
