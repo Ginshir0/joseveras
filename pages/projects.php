@@ -16,7 +16,11 @@ include __DIR__ . '/../include/header.php';
 $projects = [];
 $db_error = '';
 try {
-    $stmt = $pdo->query("SELECT id, title, description, image_url FROM projects ORDER BY created_at DESC");
+    if (is_admin()) {
+        $stmt = $pdo->query("SELECT id, title, description, image_url, is_draft FROM projects ORDER BY created_at DESC");
+    } else {
+        $stmt = $pdo->query("SELECT id, title, description, image_url FROM projects WHERE is_draft = 0 ORDER BY created_at DESC");
+    }
     $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     error_log("Projects page - Error fetching projects: " . $e->getMessage());
@@ -41,6 +45,9 @@ try {
             <section class="projects-grid">
                 <?php foreach ($projects as $project): ?>
                     <div class="project-card-wrapper">
+                        <?php if (is_admin() && !empty($project['is_draft'])): ?>
+                            <span class="badge badge-draft">Draft</span>
+                        <?php endif; ?>
                         <a href="/pages/projectDetail.php?id=<?php echo htmlspecialchars($project['id']); ?>" class="project-card">
                             <?php if (!empty($project['image_url'])): ?>
                                 <img src="/uploads/<?php echo htmlspecialchars($project['image_url']); ?>" alt="<?php echo htmlspecialchars($project['title']); ?>">

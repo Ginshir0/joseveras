@@ -15,7 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $title = trim($_POST['title'] ?? '');
         $description = trim($_POST['description'] ?? '');
-        $is_featured = isset($_POST['is_featured']) ? 1 : 0;
+        $action = $_POST['action'] ?? 'publish';
+        $is_draft = $action === 'draft' ? 1 : 0;
+        $is_featured = $is_draft ? 0 : (isset($_POST['is_featured']) ? 1 : 0);
         $image_filename = '';
 
         // Handle image upload with secure validation
@@ -39,9 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($is_featured) {
                     $pdo->exec("UPDATE projects SET is_featured = 0 WHERE is_featured = 1");
                 }
-                $stmt = $pdo->prepare("INSERT INTO projects (title, description, image_url, is_featured) VALUES (?, ?, ?, ?)");
-                $stmt->execute([$title, $description, $image_filename, $is_featured]);
-                set_flash('success', 'Project added successfully.');
+                $stmt = $pdo->prepare("INSERT INTO projects (title, description, image_url, is_featured, is_draft) VALUES (?, ?, ?, ?, ?)");
+                $stmt->execute([$title, $description, $image_filename, $is_featured, $is_draft]);
+                $flash_message = $is_draft ? 'Project saved as draft.' : 'Project published successfully.';
+                set_flash('success', $flash_message);
                 header('Location: /pages/projects.php');
                 exit;
             } catch (PDOException $e) {
@@ -82,8 +85,12 @@ include __DIR__ . '/../include/header.php';
             <label>
                 <input type="checkbox" name="is_featured" value="1"> Feature this project
             </label>
+            <p style="margin:0 0 1rem 0; color: var(--text-color); opacity:0.8;">Drafts stay hidden from the public and cannot be featured until published.</p>
 
-            <button type="submit" class="button">Add Project</button>
+            <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                <button type="submit" name="action" value="draft" class="button" style="background:#555; color:white;">Save Draft</button>
+                <button type="submit" name="action" value="publish" class="button">Publish</button>
+            </div>
         </form>
         <p style="margin-top:1rem;"><a href="/pages/projects.php">&larr; Back to Projects</a></p>
     </div>

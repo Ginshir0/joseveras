@@ -22,7 +22,7 @@ try {
     // Ordering by updated_at DESC to get the most recently updated featured project if multiple exist
     $stmt = $pdo->prepare("SELECT id, title, description, image_url
                            FROM projects
-                           WHERE is_featured = TRUE
+                           WHERE is_featured = TRUE AND is_draft = FALSE
                            ORDER BY updated_at DESC
                            LIMIT 1");
     $stmt->execute();

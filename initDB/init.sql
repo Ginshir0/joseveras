@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
     `title` VARCHAR(255) NOT NULL COMMENT 'Title of the project',
     `description` TEXT NULL COMMENT 'Detailed description of the project',
     `image_url` VARCHAR(255) NULL COMMENT 'URL or relative path to the project image',
+    `is_draft` BOOLEAN DEFAULT FALSE COMMENT 'When TRUE, project is hidden from public views until published',
     `is_featured` BOOLEAN DEFAULT FALSE COMMENT 'Set to TRUE to feature this project on the homepage',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Timestamp when the project was added',
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Timestamp when the project was last updated'

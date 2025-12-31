@@ -21,6 +21,13 @@ if ($project_id > 0) {
     $db_error = "Invalid project ID.";
 }
 
+// Handle draft visibility and SEO
+if ($project && !empty($project['is_draft']) && !is_admin()) {
+    http_response_code(404);
+    $project = null;
+    $page_robots = 'noindex, nofollow';
+}
+
 // SEO: Set dynamic page-specific meta tags based on project data
 if ($project) {
     $page_title = htmlspecialchars($project['title']) . ' | Jose Veras Portfolio';
@@ -28,10 +35,15 @@ if ($project) {
         ? substr(strip_tags($project['description']), 0, 160) . (strlen($project['description']) > 160 ? '...' : '')
         : 'View details about ' . htmlspecialchars($project['title']) . ' - a project by Jose Veras.';
     $page_keywords = 'Jose Veras, ' . htmlspecialchars($project['title']) . ', DevOps Project, Portfolio';
+    if (!empty($project['is_draft'])) {
+        $page_robots = 'noindex, nofollow';
+    }
 } else {
+    http_response_code(404);
     $page_title = 'Project Not Found | Jose Veras Portfolio';
     $page_description = 'The requested project could not be found.';
     $page_keywords = 'Jose Veras, Project, Portfolio';
+    $page_robots = 'noindex, nofollow';
 }
 
 include __DIR__ . '/../include/header.php';
@@ -44,6 +56,9 @@ include __DIR__ . '/../include/header.php';
         <?php elseif (!$project): ?>
             <p class="info-message">Project not found.</p>
         <?php else: ?>
+            <?php if (!empty($project['is_draft'])): ?>
+                <div class="badge badge-draft" style="margin-bottom:1rem; display:inline-block;">Draft (visible to admins only)</div>
+            <?php endif; ?>
             <h1><?php echo htmlspecialchars($project['title']); ?></h1>
             <?php if (!empty($project['image_url'])): ?>
                 <img src="/uploads/<?php echo htmlspecialchars($project['image_url']); ?>" alt="<?php echo htmlspecialchars($project['title']); ?>" class="project-banner">

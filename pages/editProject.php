@@ -18,7 +18,9 @@ if ($project_id > 0) {
         } else {
             $title = trim($_POST['title'] ?? '');
             $description = trim($_POST['description'] ?? '');
-            $is_featured = isset($_POST['is_featured']) ? 1 : 0;
+            $action = $_POST['action'] ?? 'publish';
+            $is_draft = $action === 'draft' ? 1 : 0;
+            $is_featured = $is_draft ? 0 : (isset($_POST['is_featured']) ? 1 : 0);
 
             // Fetch current project for image info
             $stmt = $pdo->prepare("SELECT * FROM projects WHERE id = ?");
@@ -48,9 +50,10 @@ if ($project_id > 0) {
                     if ($is_featured) {
                         $pdo->exec("UPDATE projects SET is_featured = 0 WHERE is_featured = 1");
                     }
-                    $stmt = $pdo->prepare("UPDATE projects SET title=?, description=?, image_url=?, is_featured=? WHERE id=?");
-                    $stmt->execute([$title, $description, $image_filename, $is_featured, $project_id]);
-                    set_flash('success', 'Project updated successfully.');
+                    $stmt = $pdo->prepare("UPDATE projects SET title=?, description=?, image_url=?, is_featured=?, is_draft=? WHERE id=?");
+                    $stmt->execute([$title, $description, $image_filename, $is_featured, $is_draft, $project_id]);
+                    $flash_message = $is_draft ? 'Project saved as draft.' : 'Project updated and published.';
+                    set_flash('success', $flash_message);
                     header('Location: /pages/projects.php');
                     exit;
                 } catch (PDOException $e) {
@@ -87,6 +90,12 @@ include __DIR__ . '/../include/header.php';
         <?php elseif ($project): ?>
             <form method="post" class="admin-sign-in-form" autocomplete="off" enctype="multipart/form-data">
                 <?php echo csrf_field(); ?>
+                        <p style="margin-bottom:1rem; font-weight:600; color: var(--text-color);">
+                            Status: <?php echo $project['is_draft'] ? 'Draft (admin-only)' : 'Published'; ?>
+                        </p>
+                        <?php if ($project['is_draft']): ?>
+                            <div class="badge badge-draft" style="margin-bottom:1rem; display:inline-block;">Draft</div>
+                        <?php endif; ?>
                 <label for="title">Title*</label>
                 <input type="text" name="title" id="title" value="<?php echo htmlspecialchars($project['title']); ?>" required>
 
@@ -105,8 +114,11 @@ include __DIR__ . '/../include/header.php';
                 <label>
                     <input type="checkbox" name="is_featured" value="1" <?php if ($project['is_featured']) echo 'checked'; ?>> Feature this project
                 </label>
-
-                <button type="submit" class="button">Update Project</button>
+                <p style="margin:0 0 1rem 0; color: var(--text-color); opacity:0.8;">Draft submissions ignore the featured toggle; publish first, then feature if needed.</p>
+                <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
+                    <button type="submit" name="action" value="draft" class="button" style="background:#555; color:white;">Save Draft</button>
+                    <button type="submit" name="action" value="publish" class="button">Publish</button>
+                </div>
             </form>
         <?php endif; ?>
         <p style="margin-top:1rem;"><a href="/pages/projects.php">&larr; Back to Projects</a></p>
