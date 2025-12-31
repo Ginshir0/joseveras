@@ -1,0 +1,62 @@
+# Ignore environment variable files
+.env
+.env.local
+.env.*.local
+.env.production
+.env.staging
+
+# Ignore log files
+*.log
+error_log
+php_errors.log
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+._*
+*~
+
+# Ignore Docker named volumes (if mapped to local folders)
+db_data/
+docker-compose.override.yml
+
+# Ignore IDE/project files
+.vscode/
+.idea/
+.project
+.settings/
+nbproject/
+*.sublime-workspace
+*.sublime-project
+
+# Ignore compiled files
+*.swp
+*.swo
+
+# Ignore cache
+cache/
+*.cache
+
+# Ignore uploads or user-generated content (if any)
+uploads/
+
+# Ignore temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# Ignore backup files
+*.bak
+*.backup
+*.orig
+
+# Ignore PHP dependencies and testing
+vendor/
+*.phar
+.phpunit.result.cache
+.phpunit.cache/
+coverage/
+
+# Ignore session files
+sessions/

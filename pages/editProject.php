@@ -71,6 +71,11 @@ if ($project_id > 0) {
     $error = 'Invalid project ID.';
 }
 
+// SEO: Set page-specific meta tags
+$page_title = 'Edit Project | Jose Veras Portfolio';
+$page_description = 'Edit an existing project in the Jose Veras portfolio.';
+$page_keywords = 'Edit Project, Admin, Jose Veras';
+
 include __DIR__ . '/../include/header.php';
 ?>
 
@@ -95,6 +100,7 @@ include __DIR__ . '/../include/header.php';
                     </div>
                 <?php endif; ?>
                 <input type="file" name="image" id="image" accept="image/*">
+                <small style="display:block; color: var(--text-color); opacity: 0.7; margin-bottom: 0.5rem;">Recommended: 1920×480px or any 4:1 ratio image for best banner display.</small>
 
                 <label>
                     <input type="checkbox" name="is_featured" value="1" <?php if ($project['is_featured']) echo 'checked'; ?>> Feature this project

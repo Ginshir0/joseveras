@@ -52,6 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// SEO: Set page-specific meta tags
+$page_title = 'Add Project | Jose Veras Portfolio';
+$page_description = 'Add a new project to the Jose Veras portfolio.';
+$page_keywords = 'Add Project, Admin, Jose Veras';
+
 include __DIR__ . '/../include/header.php';
 ?>
 
@@ -71,6 +76,7 @@ include __DIR__ . '/../include/header.php';
 
             <label for="image">Project Image</label>
             <input type="file" name="image" id="image" accept="image/*">
+            <small style="display:block; color: var(--text-color); opacity: 0.7; margin-bottom: 0.5rem;">Recommended: 1920×480px or any 4:1 ratio image for best banner display.</small>
             <div id="image-size-error" style="color:#b80000; margin-bottom:0.5rem; display:none;"></div>
 
             <label>

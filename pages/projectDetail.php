@@ -1,9 +1,7 @@
 <?php
-session_start();
+require_once __DIR__ . '/../config/auth.php';
+init_session();
 require_once __DIR__ . '/../config/db.php';
-include __DIR__ . '/../include/header.php';
-
-// TODO: Validate and sanitize project ID from query string.
 
 // Get project ID from query string
 $project_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
@@ -22,6 +20,21 @@ if ($project_id > 0) {
 } else {
     $db_error = "Invalid project ID.";
 }
+
+// SEO: Set dynamic page-specific meta tags based on project data
+if ($project) {
+    $page_title = htmlspecialchars($project['title']) . ' | Jose Veras Portfolio';
+    $page_description = !empty($project['description']) 
+        ? substr(strip_tags($project['description']), 0, 160) . (strlen($project['description']) > 160 ? '...' : '')
+        : 'View details about ' . htmlspecialchars($project['title']) . ' - a project by Jose Veras.';
+    $page_keywords = 'Jose Veras, ' . htmlspecialchars($project['title']) . ', DevOps Project, Portfolio';
+} else {
+    $page_title = 'Project Not Found | Jose Veras Portfolio';
+    $page_description = 'The requested project could not be found.';
+    $page_keywords = 'Jose Veras, Project, Portfolio';
+}
+
+include __DIR__ . '/../include/header.php';
 ?>
 
 <main>
@@ -33,7 +46,7 @@ if ($project_id > 0) {
         <?php else: ?>
             <h1><?php echo htmlspecialchars($project['title']); ?></h1>
             <?php if (!empty($project['image_url'])): ?>
-                <img src="/uploads/<?php echo htmlspecialchars($project['image_url']); ?>" alt="<?php echo htmlspecialchars($project['title']); ?>" style="max-width: 100%; height: auto; border-radius: 10px; margin-bottom: 1.5rem;">
+                <img src="/uploads/<?php echo htmlspecialchars($project['image_url']); ?>" alt="<?php echo htmlspecialchars($project['title']); ?>" class="project-banner">
             <?php endif; ?>
             <?php if (!empty($project['description'])): ?>
                 <p><?php echo nl2br(htmlspecialchars($project['description'])); ?></p>

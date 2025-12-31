@@ -4,6 +4,12 @@
 // Include necessary files
 // Database configuration - needed to fetch the featured project
 require_once __DIR__ . '/config/db.php';
+
+// SEO: Set page-specific meta tags (before including header)
+$page_title = 'Jose Veras - DevOps Portfolio | System Administrator';
+$page_description = 'Welcome to Jose Veras\'s portfolio. A System Administrator transitioning to DevOps, showcasing projects featuring Docker, CI/CD, and cloud infrastructure.';
+$page_keywords = 'Jose Veras, DevOps Portfolio, System Administrator, Docker, CI/CD, Linux, Cloud Infrastructure, IT Projects';
+
 // Header - includes the opening HTML, head section, and navigation
 include __DIR__ . '/include/header.php'; // Use __DIR__ for reliable path resolution
 

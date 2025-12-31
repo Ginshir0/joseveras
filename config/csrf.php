@@ -2,14 +2,14 @@
 // config/csrf.php
 // Simple CSRF protection helper functions
 
+require_once __DIR__ . '/auth.php';
+
 /**
  * Generate a CSRF token and store it in the session
  * @return string The generated token
  */
 function csrf_token(): string {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
+    init_session();
     
     if (empty($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -28,30 +28,32 @@ function csrf_field(): string {
 
 /**
  * Verify the CSRF token from the request
- * @param string|null $token The token to verify (defaults to $_POST['csrf_token'])
+ * @param string|null $token The token to verify (defaults to $_POST['csrf_token'] or header)
  * @return bool True if valid, false otherwise
  */
 function csrf_verify(?string $token = null): bool {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
+    init_session();
     
-    $token = $token ?? ($_POST['csrf_token'] ?? '');
+    // Accept token from POST body or X-CSRF-Token header (useful for AJAX)
+    $token = $token ?? ($_POST['csrf_token'] ?? ($_SERVER['HTTP_X_CSRF_TOKEN'] ?? ''));
     
     if (empty($_SESSION['csrf_token']) || empty($token)) {
+        error_log('CSRF verify failed: session_token ' . (isset($_SESSION['csrf_token']) ? 'present' : 'missing') . ', post_token ' . (isset($_POST['csrf_token']) ? 'present' : 'missing') . ', header_token ' . (isset($_SERVER['HTTP_X_CSRF_TOKEN']) ? 'present' : 'missing'));
         return false;
     }
     
-    return hash_equals($_SESSION['csrf_token'], $token);
+    $valid = hash_equals($_SESSION['csrf_token'], $token);
+    if (!$valid) {
+        error_log('CSRF verify mismatch: token present but does not match stored session token');
+    }
+    return $valid;
 }
 
 /**
  * Regenerate the CSRF token (call after successful form submission)
  */
 function csrf_regenerate(): void {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
+    init_session();
     
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }

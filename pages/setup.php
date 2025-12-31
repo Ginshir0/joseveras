@@ -20,6 +20,7 @@ $username_value = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verify CSRF token
     if (!csrf_verify()) {
+        error_log('CSRF verify failed on setup: session_token ' . (isset($_SESSION['csrf_token']) ? 'present' : 'missing') . ', post_token ' . (isset($_POST['csrf_token']) ? 'present' : 'missing') . ', header_token ' . (isset($_SERVER['HTTP_X_CSRF_TOKEN']) ? 'present' : 'missing'));
         $errors[] = 'Invalid request. Please try again.';
     } else {
         $username = trim($_POST['username'] ?? '');
@@ -90,6 +91,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Initial Setup - Jose Veras Portfolio</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Initial admin setup for Jose Veras Portfolio. Create your admin account to get started.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#7FDCD6">
+    
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/login.css">
 </head>
