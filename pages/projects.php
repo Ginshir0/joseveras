@@ -4,6 +4,12 @@ require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../config/csrf.php';
 
 init_session();
+
+// SEO: Set page-specific meta tags
+$page_title = 'Projects | Jose Veras - DevOps Portfolio';
+$page_description = 'Browse Jose Veras\'s DevOps and system administration projects. See hands-on work with Docker, CI/CD pipelines, and infrastructure automation.';
+$page_keywords = 'DevOps Projects, Docker Projects, CI/CD, Infrastructure Automation, Jose Veras Portfolio, System Administration Projects';
+
 include __DIR__ . '/../include/header.php';
 
 // Fetch all projects

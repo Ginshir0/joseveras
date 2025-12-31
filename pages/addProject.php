@@ -52,6 +52,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// SEO: Set page-specific meta tags
+$page_title = 'Add Project | Jose Veras Portfolio';
+$page_description = 'Add a new project to the Jose Veras portfolio.';
+$page_keywords = 'Add Project, Admin, Jose Veras';
+
 include __DIR__ . '/../include/header.php';
 ?>
 

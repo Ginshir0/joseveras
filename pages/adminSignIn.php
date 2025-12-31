@@ -55,6 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// SEO: Set page-specific meta tags (noindex for admin pages)
+$page_title = 'Admin Sign In | Jose Veras Portfolio';
+$page_description = 'Admin login page for Jose Veras Portfolio management.';
+$page_keywords = 'Admin, Login, Jose Veras';
+
 include __DIR__ . '/../include/header.php';
 ?>
 

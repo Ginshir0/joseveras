@@ -91,6 +91,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Initial Setup - Jose Veras Portfolio</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Initial admin setup for Jose Veras Portfolio. Create your admin account to get started.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#7FDCD6">
+    
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/login.css">
 </head>

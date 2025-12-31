@@ -71,6 +71,11 @@ if ($project_id > 0) {
     $error = 'Invalid project ID.';
 }
 
+// SEO: Set page-specific meta tags
+$page_title = 'Edit Project | Jose Veras Portfolio';
+$page_description = 'Edit an existing project in the Jose Veras portfolio.';
+$page_keywords = 'Edit Project, Admin, Jose Veras';
+
 include __DIR__ . '/../include/header.php';
 ?>
 
