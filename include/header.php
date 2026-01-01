@@ -4,6 +4,13 @@ require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../config/auth.php';
 init_session();
 
+// Production HTTPS redirect using X-Forwarded-Proto header (Railway/proxy)
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] !== 'https') {
+    $redirect_url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    header('Location: ' . $redirect_url, true, 301);
+    exit;
+}
+
 // Check if initial setup is required (no admin users exist)
 // Redirect to setup page if needed (but not if already on setup page)
 
