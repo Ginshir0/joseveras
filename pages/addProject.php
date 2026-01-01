@@ -20,6 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $is_featured = $is_draft ? 0 : (isset($_POST['is_featured']) ? 1 : 0);
         $image_filename = '';
 
+        // Validate input lengths
+        if (strlen($title) > 255) {
+            $error = 'Title must be 255 characters or less.';
+        }
+        if (strlen($description) > 65535) {
+            $error = 'Description is too long.';
+        }
+
         // Handle image upload with secure validation
         if (isset($_FILES['image'])) {
             $upload_result = handle_image_upload(
@@ -34,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        if ($title === '') {
+        if (!$error && $title === '') {
             $error = 'Title is required.';
         } elseif (!$error) {
             try {

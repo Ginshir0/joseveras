@@ -83,6 +83,13 @@ if (strpos($current_page, 'Detail') === false) {
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/login.css">
 
+    <?php
+    // Content Security Policy for XSS protection
+    header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none';");
+    header("X-Content-Type-Options: nosniff");
+    header("X-Frame-Options: DENY");
+    header("Referrer-Policy: strict-origin-when-cross-origin");
+    ?>
     </head>
 <body>
 

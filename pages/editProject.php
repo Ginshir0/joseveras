@@ -22,6 +22,14 @@ if ($project_id > 0) {
             $is_draft = $action === 'draft' ? 1 : 0;
             $is_featured = $is_draft ? 0 : (isset($_POST['is_featured']) ? 1 : 0);
 
+            // Validate input lengths
+            if (strlen($title) > 255) {
+                $error = 'Title must be 255 characters or less.';
+            }
+            if (strlen($description) > 65535) {
+                $error = 'Description is too long.';
+            }
+
             // Fetch current project for image info
             $stmt = $pdo->prepare("SELECT * FROM projects WHERE id = ?");
             $stmt->execute([$project_id]);
@@ -43,7 +51,7 @@ if ($project_id > 0) {
                 }
             }
 
-            if ($title === '') {
+            if (!$error && $title === '') {
                 $error = 'Title is required.';
             } elseif (!$error) {
                 try {

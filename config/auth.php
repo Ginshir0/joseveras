@@ -11,6 +11,7 @@ function init_session(): void {
             'lifetime' => 0,
             'path' => '/',
             'httponly' => true,
+            'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on',
             'samesite' => 'Strict'
         ]);
         session_start();
@@ -154,10 +155,14 @@ function check_login_blocked(PDO $pdo, string $username, string $ip_address, int
  * @return string
  */
 function get_client_ip(): string {
-    // Check for proxy headers (be careful with these in production)
+    // Check for proxy headers - validate IP format to prevent spoofing
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-        return trim($ips[0]);
+        $ip = trim($ips[0]);
+        // Validate IP format before trusting proxy header
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+            return $ip;
+        }
     }
     return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
 }
