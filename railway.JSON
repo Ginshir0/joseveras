@@ -1,0 +1,5 @@
+{
+  "buildCommand": "docker build -t app .",
+  "startCommand": "docker compose up",
+  "enviroment": "production"
+}
