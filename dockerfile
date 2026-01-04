@@ -60,8 +60,9 @@ RUN { \
     } > /usr/local/etc/php/conf.d/production.ini
 
 # --- Enable Apache Modules ---
-# Disable conflicting MPMs and enable only prefork (compatible with mod_php)
-RUN a2dismod mpm_event mpm_worker 2>/dev/null || true \
+# Force disable all MPM modules first, then enable only prefork (compatible with mod_php)
+RUN rm -f /etc/apache2/mods-enabled/mpm_event.* \
+    && rm -f /etc/apache2/mods-enabled/mpm_worker.* \
     && a2enmod mpm_prefork rewrite headers
 
 # --- Create Health Check Endpoint ---
