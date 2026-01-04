@@ -8,8 +8,6 @@ services:
     build: .
     # Name the container for easier reference (optional)
     container_name: jv-php-app
-    # Restart policy: restart unless explicitly stopped
-    restart: unless-stopped
     # Map port 8080 on your host machine to port 80 in the container (Apache's default)
     # You'll access your site at http://localhost:8080
     ports:

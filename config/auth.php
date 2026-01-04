@@ -7,30 +7,13 @@
  */
 function init_session(): void {
     if (session_status() === PHP_SESSION_NONE) {
-        // Read session timeout from environment (default 24 hours in seconds)
-        $session_timeout = (int)(getenv('SESSION_TIMEOUT') ?: 86400);
-        
         session_set_cookie_params([
-            'lifetime' => $session_timeout,
+            'lifetime' => 0,
             'path' => '/',
             'httponly' => true,
-            'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on',
             'samesite' => 'Strict'
         ]);
-        
-        // Set server-side session garbage collection timeout
-        ini_set('session.gc_maxlifetime', (string)$session_timeout);
-        
         session_start();
-        
-        // Enforce server-side idle timeout - logout user if inactive
-        if (isset($_SESSION['last_activity']) && 
-            (time() - $_SESSION['last_activity'] > $session_timeout)) {
-            session_unset();
-            session_destroy();
-            session_start();
-        }
-        $_SESSION['last_activity'] = time();
     }
 }
 
@@ -171,14 +154,10 @@ function check_login_blocked(PDO $pdo, string $username, string $ip_address, int
  * @return string
  */
 function get_client_ip(): string {
-    // Check for proxy headers - validate IP format to prevent spoofing
+    // Check for proxy headers (be careful with these in production)
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         $ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-        $ip = trim($ips[0]);
-        // Validate IP format before trusting proxy header
-        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
-            return $ip;
-        }
+        return trim($ips[0]);
     }
     return $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
 }

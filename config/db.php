@@ -1,32 +1,41 @@
 <?php
 // config/db.php
 // Establishes the connection to the MySQL database using PDO.
-// Reads credentials from environment variables set by Docker Compose.
+// Reads credentials from environment variables set by Docker Compose or Railway.
 
-// --- Environment Configuration ---
-// Read application environment (production or development)
-$app_env = getenv('APP_ENV') ?: 'production';
-define('APP_ENV', $app_env);
-
-// Set error handling based on environment
-if ($app_env === 'development' || $app_env === 'dev') {
-    ini_set('display_errors', '1');
-    ini_set('display_startup_errors', '1');
-    error_reporting(E_ALL);
-} else {
-    ini_set('display_errors', '0');
-    error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+// --- Helper Function ---
+// Gets the first non-empty value from a list of environment variable names.
+function getEnvWithFallback(array $keys, $default = null) {
+    foreach ($keys as $key) {
+        $value = getenv($key);
+        if ($value !== false && $value !== '') {
+            return $value;
+        }
+    }
+    return $default;
 }
 
 // --- Database Credentials ---
-// Read credentials from environment variables set by Railway.
-// Railway uses MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD conventions.
-// Fallback values are provided for local development.
-$db_host = getenv('DB_HOST') ?: 'localhost';
-$db_name = getenv('MYSQL_DATABASE') ?: 'my_website_db';
-$db_user = getenv('MYSQL_USER') ?: 'user';
-$db_pass = getenv('MYSQL_PASSWORD') ?: 'password';
-$db_port = 3306; // Default MySQL port, usually doesn't need to be an env variable unless non-standard
+// Read credentials from environment variables.
+// Supports both standard DB_* variables (Docker Compose) and Railway's MYSQL* variables.
+$db_host = getEnvWithFallback(['DB_HOST', 'MYSQLHOST', 'MYSQL_HOST']);
+$db_name = getEnvWithFallback(['DB_DATABASE', 'MYSQLDATABASE', 'MYSQL_DATABASE']);
+$db_user = getEnvWithFallback(['DB_USER', 'MYSQLUSER', 'MYSQL_USER']);
+$db_pass = getEnvWithFallback(['DB_PASSWORD', 'MYSQLPASSWORD', 'MYSQL_PASSWORD']);
+$db_port = getEnvWithFallback(['DB_PORT', 'MYSQLPORT', 'MYSQL_PORT'], 3306);
+
+// Validate required credentials
+$missing = [];
+if (empty($db_host)) $missing[] = 'DB_HOST/MYSQLHOST';
+if (empty($db_name)) $missing[] = 'DB_DATABASE/MYSQLDATABASE';
+if (empty($db_user)) $missing[] = 'DB_USER/MYSQLUSER';
+if ($db_pass === null) $missing[] = 'DB_PASSWORD/MYSQLPASSWORD';
+
+if (!empty($missing)) {
+    error_log('Database configuration missing environment variables: ' . implode(', ', $missing));
+    http_response_code(500);
+    die('Application is not configured to connect to the database.');
+}
 
 // --- Data Source Name (DSN) ---
 // String that specifies the database connection details for PDO.
