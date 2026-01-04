@@ -46,12 +46,12 @@ COPY docker/apache/vhost.conf /etc/apache2/sites-available/000-default.conf
 
 # --- Production PHP Configuration ---
 # Set production PHP settings
+# Note: display_errors is controlled by APP_ENV in config/db.php
 RUN { \
     echo 'upload_max_filesize = 10M'; \
     echo 'post_max_size = 10M'; \
     echo 'memory_limit = 256M'; \
     echo 'max_execution_time = 30'; \
-    echo 'display_errors = Off'; \
     echo 'log_errors = On'; \
     echo 'error_log = /var/log/php_errors.log'; \
     echo 'session.cookie_httponly = On'; \

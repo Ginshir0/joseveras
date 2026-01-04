@@ -3,16 +3,29 @@
 // Establishes the connection to the MySQL database using PDO.
 // Reads credentials from environment variables set by Docker Compose.
 
+// --- Environment Configuration ---
+// Read application environment (production or development)
+$app_env = getenv('APP_ENV') ?: 'production';
+define('APP_ENV', $app_env);
+
+// Set error handling based on environment
+if ($app_env === 'development' || $app_env === 'dev') {
+    ini_set('display_errors', '1');
+    ini_set('display_startup_errors', '1');
+    error_reporting(E_ALL);
+} else {
+    ini_set('display_errors', '0');
+    error_reporting(E_ALL & ~E_DEPRECATED & ~E_STRICT);
+}
+
 // --- Database Credentials ---
-// Read credentials from environment variables.
-// The names (DB_HOST, DB_DATABASE, etc.) must match those defined
-// in the 'environment' section of the 'app' service in docker-compose.yml.
-// Fallback values (e.g., 'db', 'my_website_db') are provided but should
-// ideally not be needed if the .env file is correctly configured.
-$db_host = getenv('DB_HOST') ?: 'db';
-$db_name = getenv('DB_DATABASE') ?: 'my_website_db';
-$db_user = getenv('DB_USER') ?: 'user';
-$db_pass = getenv('DB_PASSWORD') ?: 'password';
+// Read credentials from environment variables set by Railway.
+// Railway uses MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD conventions.
+// Fallback values are provided for local development.
+$db_host = getenv('DB_HOST') ?: 'localhost';
+$db_name = getenv('MYSQL_DATABASE') ?: 'my_website_db';
+$db_user = getenv('MYSQL_USER') ?: 'user';
+$db_pass = getenv('MYSQL_PASSWORD') ?: 'password';
 $db_port = 3306; // Default MySQL port, usually doesn't need to be an env variable unless non-standard
 
 // --- Data Source Name (DSN) ---

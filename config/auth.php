@@ -7,14 +7,30 @@
  */
 function init_session(): void {
     if (session_status() === PHP_SESSION_NONE) {
+        // Read session timeout from environment (default 24 hours in seconds)
+        $session_timeout = (int)(getenv('SESSION_TIMEOUT') ?: 86400);
+        
         session_set_cookie_params([
-            'lifetime' => 0,
+            'lifetime' => $session_timeout,
             'path' => '/',
             'httponly' => true,
             'secure' => isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on',
             'samesite' => 'Strict'
         ]);
+        
+        // Set server-side session garbage collection timeout
+        ini_set('session.gc_maxlifetime', (string)$session_timeout);
+        
         session_start();
+        
+        // Enforce server-side idle timeout - logout user if inactive
+        if (isset($_SESSION['last_activity']) && 
+            (time() - $_SESSION['last_activity'] > $session_timeout)) {
+            session_unset();
+            session_destroy();
+            session_start();
+        }
+        $_SESSION['last_activity'] = time();
     }
 }
 
