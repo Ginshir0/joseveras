@@ -61,8 +61,7 @@ RUN { \
 
 # --- Enable Apache Modules ---
 # Force disable all MPM modules first, then enable only prefork (compatible with mod_php)
-RUN rm -f /etc/apache2/mods-enabled/mpm_event.* \
-    && rm -f /etc/apache2/mods-enabled/mpm_worker.* \
+RUN a2dismod mpm_event mpm_worker || true \
     && a2enmod mpm_prefork rewrite headers
 
 # --- Create Health Check Endpoint ---
