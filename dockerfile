@@ -60,9 +60,9 @@ RUN { \
     } > /usr/local/etc/php/conf.d/production.ini
 
 # --- Enable Apache Modules ---
-# Properly disable other MPM modules and enable prefork (required for mod_php)
-RUN a2dismod mpm_event mpm_worker || true \
-    && a2enmod mpm_prefork rewrite headers
+# Only enable modules not already active in php:apache image
+# (mpm_prefork is already enabled by default in this base image)
+RUN a2enmod rewrite headers
 
 # --- Create Health Check Endpoint ---
 RUN echo "<?php http_response_code(200); echo 'OK'; ?>" > /var/www/html/health.php
