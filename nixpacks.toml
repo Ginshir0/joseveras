@@ -1,2 +1,2 @@
 [phases.setup]
-nixPkgs = ["php84Extensions.pdo_mysql", "php84Extensions.pdo"]
+aptPkgs = ["php-mysql", "php-pdo"]
