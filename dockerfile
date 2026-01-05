@@ -68,6 +68,9 @@ RUN a2enmod rewrite headers
 # Railway provides PORT env variable; Apache must listen on it
 RUN sed -i 's/Listen 80/Listen ${PORT:-80}/' /etc/apache2/ports.conf
 
+# --- Enable environment variable substitution for Apache ---
+RUN echo 'PassEnv PORT' >> /etc/apache2/conf-available/environment.conf && a2enconf environment
+
 # --- Create Health Check Endpoint ---
 RUN echo "<?php http_response_code(200); echo 'OK'; ?>" > /var/www/html/health.php
 
