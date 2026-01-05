@@ -64,6 +64,10 @@ RUN { \
 # (mpm_prefork is already enabled by default in this base image)
 RUN a2enmod rewrite headers
 
+# --- Configure Dynamic Port for Railway ---
+# Railway provides PORT env variable; Apache must listen on it
+RUN sed -i 's/Listen 80/Listen ${PORT:-80}/' /etc/apache2/ports.conf
+
 # --- Create Health Check Endpoint ---
 RUN echo "<?php http_response_code(200); echo 'OK'; ?>" > /var/www/html/health.php
 
