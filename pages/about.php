@@ -10,10 +10,37 @@ $page_keywords = 'About Jose Veras, DevOps Engineer, System Administrator, Caree
 include __DIR__ . '/../include/header.php';
 ?>
 
-<main>
+<main class="about-page">
     <div class="content-wrapper">
         <h1>About Me</h1>
-        <!-- About content will go here -->
+        
+        <div style="display: flex; flex-direction: column; gap: 2rem; max-width: 900px; margin: 2rem auto 0;">
+            
+            <!-- Technologist Section -->
+            <div class="project-card">
+                <h3>Technologist</h3>
+                <p style="margin-bottom: 1rem;">
+                    TBD
+                </p>
+            </div>
+
+            <!-- Cognitivist Section -->
+            <div class="project-card">
+                <h3>Cognitivist</h3>
+                <p style="margin-bottom: 1rem;">
+                    TBD
+                </p>
+            </div>
+
+            <!-- Crossfitter (Hybrid Athlete) Section -->
+            <div class="project-card">
+                <h3>Crossfitter (Hybrid Athlete)</h3>
+                <p style="margin-bottom: 1rem;">
+                    TBD
+                </p>
+            </div>
+
+        </div>
     </div>
 </main>
 

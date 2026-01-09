@@ -140,6 +140,7 @@ h1 {
   font-size: 3rem;
   background: linear-gradient(135deg, var(--accent-color), var(--secondary-accent-color));
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   margin-bottom: 2rem;
 }
@@ -154,10 +155,17 @@ h1 {
 
 #featured-project {
   background: rgba(255, 255, 255, 0.05);
-  border-radius: 16px;
+  border-radius: 12px;
   backdrop-filter: blur(10px);
   padding: 2rem;
   margin-top: 3rem;
+  transition: box-shadow 0.2s, transform 0.2s;
+  border: 1.5px solid var(--accent-color);
+}
+
+/* Add breathing room between header and featured content */
+#featured-project h2 {
+  margin-bottom: 1rem;
 }
 
 .content-wrapper {
@@ -191,6 +199,17 @@ h1 {
   box-shadow: 0 6px 24px rgba(127,220,214,0.18);
   transform: translateY(-4px) scale(1.02);
   border-color: var(--secondary-accent-color);
+}
+
+/* Neutralize card hover only on About page */
+.about-page .project-card {
+  transition: none;
+}
+
+.about-page .project-card:hover {
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  transform: none;
+  border-color: var(--accent-color);
 }
 
 .project-card img {

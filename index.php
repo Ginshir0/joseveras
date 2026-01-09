@@ -73,14 +73,14 @@ try {
                 <?php // Using projectDetail.php?id=... assumes you have this page set up ?>
                 <a href="/pages/projectDetail.php?id=<?php echo htmlspecialchars($featured_project['id']); ?>" class="featured-project-link">
                     <article>
-                        <h3><?php echo htmlspecialchars($featured_project['title']); ?></h3>
-
                         <?php if (!empty($featured_project['image_url'])): ?>
                             <?php // Use /uploads/{image_url} for image path ?>
                             <img src="/uploads/<?php echo htmlspecialchars($featured_project['image_url']); ?>"
                                 alt="Screenshot or logo for <?php echo htmlspecialchars($featured_project['title']); ?>"
                                 style="max-width: 100%; height: auto; margin-bottom: 15px; border-radius: 8px;">
                         <?php endif; ?>
+
+                        <h3><?php echo htmlspecialchars($featured_project['title']); ?></h3>
 
                         <?php if (!empty($featured_project['description'])): ?>
                             <p>
