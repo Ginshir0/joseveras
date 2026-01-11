@@ -41,7 +41,6 @@ include __DIR__ . '/../include/header.php';
 <main>
     <div class="content-wrapper">
         <h1>Blog</h1>
-        <p style="margin-bottom: 1.5rem;">Articles and insights on system administration, automation, and IT.</p>
 
         <?php
         // Show flash messages
