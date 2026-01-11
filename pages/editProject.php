@@ -54,6 +54,9 @@ if ($project_id > 0) {
             if (!$error && $title === '') {
                 $error = 'Title is required.';
             } elseif (!$error) {
+                if (!$is_draft && !$image_filename) {
+                    $image_filename = 'Projects Placeholder.png';
+                }
                 try {
                     if ($is_featured) {
                         $pdo->exec("UPDATE projects SET is_featured = 0 WHERE is_featured = 1");
@@ -83,9 +86,9 @@ if ($project_id > 0) {
 }
 
 // SEO: Set page-specific meta tags
-$page_title = 'Edit Project | Jose Veras Portfolio';
-$page_description = 'Edit an existing project in the Jose Veras portfolio.';
-$page_keywords = 'Edit Project, Admin, Jose Veras';
+$page_title = 'Edit Project | Jose Veras - Portfolio';
+$page_description = 'Edit an existing project in Jose Veras\'s System Administrator portfolio.';
+$page_keywords = 'Edit Project, Portfolio Admin, Jose Veras';
 
 include __DIR__ . '/../include/header.php';
 ?>

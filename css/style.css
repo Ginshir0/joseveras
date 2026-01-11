@@ -86,10 +86,28 @@ a:hover {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  text-decoration: none;
+  font-size: 1rem;
+  min-height: 40px;
 }
 
 .button:hover {
   opacity: 0.9; /* Slight hover effect */
+  color: var(--button-text); /* Maintain button text color on hover */
+}
+
+.button--danger {
+  background: #b80000;
+  color: white;
+}
+
+.button--danger:hover {
+  opacity: 0.9;
+  color: white;
 }
 
 header {
@@ -177,9 +195,16 @@ h1 {
 /* Projects grid and card styles */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
   margin-top: 2rem;
+  align-items: stretch;
+}
+
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 .project-card {
@@ -193,6 +218,8 @@ h1 {
   color: inherit;
   transition: box-shadow 0.2s, transform 0.2s;
   border: 1.5px solid var(--accent-color);
+  min-height: 320px;
+  height: 100%;
 }
 
 .project-card:hover {
@@ -246,6 +273,7 @@ h1 {
   position: relative;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 .project-admin-actions {
@@ -253,6 +281,15 @@ h1 {
   justify-content: flex-end;
   gap: 0.5rem;
   margin-top: 0.7rem;
+}
+
+.project-admin-actions .button {
+  min-width: 80px;
+  box-sizing: border-box;
+}
+
+.project-admin-actions form {
+  display: contents;
 }
 
 .badge {

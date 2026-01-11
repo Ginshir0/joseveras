@@ -22,9 +22,9 @@ if ($current_page !== 'setup.php' && is_setup_required($pdo)) {
 
 // SEO Defaults - Pages can override these before including header.php
 $site_name = 'Jose Veras';
-$default_title = 'Jose Veras - DevOps Portfolio';
-$default_description = 'Jose Veras - System Administrator transitioning to DevOps. Explore my portfolio of projects featuring Docker, CI/CD, and cloud infrastructure as I document my learning journey.';
-$default_keywords = 'Jose Veras, DevOps, System Administrator, Docker, CI/CD, Linux, Cloud Infrastructure, Portfolio, IT Professional';
+$default_title = 'Jose Veras - Portfolio | System Administrator';
+$default_description = 'Welcome to Jose Veras\'s portfolio. A System Administrator passionate about Automation, Problem-Solving, and Continuous Learning in IT. Explore projects involving Artificial Intelligence, Linux, Cloud Infrastructure, and more.';
+$default_keywords = 'Jose Veras, Portfolio, System Administrator, Artificial Intelligence, Linux, Cloud Infrastructure, IT Projects';
 
 // Use page-specific values if set, otherwise use defaults
 $page_title = isset($page_title) ? $page_title : $default_title;
@@ -84,19 +84,34 @@ header("Referrer-Policy: strict-origin-when-cross-origin");
         "@type": "Person",
         "name": "Jose Veras",
         "url": "<?php echo htmlspecialchars($canonical_url); ?>",
-        "jobTitle": "System Administrator / DevOps Engineer",
+        "jobTitle": "System Administrator",
         "description": "<?php echo htmlspecialchars($page_description); ?>",
         "sameAs": [
             "https://github.com/Ginshir0",
             "https://www.linkedin.com/in/jose-veras-b1a089ab/",
             "https://twitter.com/josever65725881"
         ],
-        "knowsAbout": ["DevOps", "Docker", "CI/CD", "Linux", "System Administration", "Cloud Infrastructure"]
+        "knowsAbout": ["System Administration", "Artificial Intelligence", "Linux", "Cloud Infrastructure", "Automation", "IT Projects"]
     }
     </script>
 
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/login.css">
+    
+    <!-- TinyMCE Rich Text Editor -->
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: 'textarea#article-content',
+            plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+            toolbar: 'undo redo | formatselect | bold italic underline strikethrough | link image media table | alignleft aligncenter alignright | bullist numlist | removeformat',
+            height: 400,
+            menubar: false,
+            setup: function(editor) {
+                // Add custom styles or initialization if needed
+            }
+        });
+    </script>
 </head>
 <body>
 
@@ -105,6 +120,7 @@ header("Referrer-Policy: strict-origin-when-cross-origin");
             <ul>
                 <li><a href="/index.php">Home</a></li>
                 <li><a href="/pages/projects.php">Projects</a></li>
+                <li><a href="/pages/blog.php">Blog</a></li>
                 <li><a href="https://resume.joseveras.com" target="_blank" rel="noopener noreferrer">Resume</a></li>
                 <li><a href="/pages/about.php">About</a></li>
                 <?php

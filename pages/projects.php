@@ -6,9 +6,9 @@ require_once __DIR__ . '/../config/csrf.php';
 init_session();
 
 // SEO: Set page-specific meta tags
-$page_title = 'Projects | Jose Veras - DevOps Portfolio';
-$page_description = 'Browse Jose Veras\'s DevOps and system administration projects. See hands-on work with Docker, CI/CD pipelines, and infrastructure automation.';
-$page_keywords = 'DevOps Projects, Docker Projects, CI/CD, Infrastructure Automation, Jose Veras Portfolio, System Administration Projects';
+$page_title = 'Projects | Jose Veras - Portfolio';
+$page_description = 'Browse Jose Veras\'s System Administration projects. Explore hands-on work with Artificial Intelligence, Linux, Cloud Infrastructure, and automation.';
+$page_keywords = 'System Administrator, Projects, Artificial Intelligence, Linux, Cloud Infrastructure, IT Projects, Automation, Jose Veras Portfolio';
 
 include __DIR__ . '/../include/header.php';
 
@@ -44,13 +44,19 @@ try {
         <?php else: ?>
             <section class="projects-grid">
                 <?php foreach ($projects as $project): ?>
+                    <?php
+                        $isDraft = !empty($project['is_draft']);
+                        $imageFilename = $project['image_url'] ?? '';
+                        $displayImage = $isDraft ? '' : ($imageFilename ?: 'Projects Placeholder.png');
+                        $isPlaceholder = ($displayImage === 'Projects Placeholder.png');
+                    ?>
                     <div class="project-card-wrapper">
-                        <?php if (is_admin() && !empty($project['is_draft'])): ?>
+                        <?php if (is_admin() && $isDraft): ?>
                             <span class="badge badge-draft">Draft</span>
                         <?php endif; ?>
                         <a href="/pages/projectDetail.php?id=<?php echo htmlspecialchars($project['id']); ?>" class="project-card">
-                            <?php if (!empty($project['image_url'])): ?>
-                                <img src="/uploads/<?php echo htmlspecialchars($project['image_url']); ?>" alt="<?php echo htmlspecialchars($project['title']); ?>">
+                            <?php if ($displayImage): ?>
+                                <img src="<?php echo $isPlaceholder ? '/images/Projects%20Placeholder.png' : '/uploads/' . htmlspecialchars($displayImage); ?>" alt="<?php echo htmlspecialchars($project['title']); ?>">
                             <?php endif; ?>
                             <h3><?php echo htmlspecialchars($project['title']); ?></h3>
                             <?php if (!empty($project['description'])): ?>
@@ -59,11 +65,11 @@ try {
                         </a>
                         <?php if (is_admin()): ?>
                             <div class="project-admin-actions">
-                                <a href="/pages/editProject.php?id=<?php echo htmlspecialchars($project['id']); ?>" class="button" style="margin-right: 0.5rem;">Edit</a>
-                                <form method="post" action="/pages/deleteProject.php" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                <a href="/pages/editProject.php?id=<?php echo htmlspecialchars($project['id']); ?>" class="button">Edit</a>
+                                <form method="post" action="/pages/deleteProject.php" onsubmit="return confirm('Are you sure you want to delete this project?');">
                                     <?php echo csrf_field(); ?>
                                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($project['id']); ?>">
-                                    <button type="submit" class="button" style="background:#b80000; color:white;">Delete</button>
+                                    <button type="submit" class="button button--danger">Delete</button>
                                 </form>
                             </div>
                         <?php endif; ?>

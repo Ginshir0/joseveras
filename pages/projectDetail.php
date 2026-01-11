@@ -34,7 +34,7 @@ if ($project) {
     $page_description = !empty($project['description']) 
         ? substr(strip_tags($project['description']), 0, 160) . (strlen($project['description']) > 160 ? '...' : '')
         : 'View details about ' . htmlspecialchars($project['title']) . ' - a project by Jose Veras.';
-    $page_keywords = 'Jose Veras, ' . htmlspecialchars($project['title']) . ', DevOps Project, Portfolio';
+    $page_keywords = 'Jose Veras, Portfolio, System Administrator, IT Projects, ' . htmlspecialchars($project['title']);
     if (!empty($project['is_draft'])) {
         $page_robots = 'noindex, nofollow';
     }
@@ -56,12 +56,18 @@ include __DIR__ . '/../include/header.php';
         <?php elseif (!$project): ?>
             <p class="info-message">Project not found.</p>
         <?php else: ?>
-            <?php if (!empty($project['is_draft'])): ?>
+            <?php
+                $isDraft = !empty($project['is_draft']);
+                $imageFilename = $project['image_url'] ?? '';
+                $displayImage = $isDraft ? '' : ($imageFilename ?: 'Projects Placeholder.png');
+                $isPlaceholder = ($displayImage === 'Projects Placeholder.png');
+            ?>
+            <?php if ($isDraft): ?>
                 <div class="badge badge-draft" style="margin-bottom:1rem; display:inline-block;">Draft (visible to admins only)</div>
             <?php endif; ?>
             <h1><?php echo htmlspecialchars($project['title']); ?></h1>
-            <?php if (!empty($project['image_url'])): ?>
-                <img src="/uploads/<?php echo htmlspecialchars($project['image_url']); ?>" alt="<?php echo htmlspecialchars($project['title']); ?>" class="project-banner">
+            <?php if ($displayImage): ?>
+                <img src="<?php echo $isPlaceholder ? '/images/Projects%20Placeholder.png' : '/uploads/' . htmlspecialchars($displayImage); ?>" alt="<?php echo htmlspecialchars($project['title']); ?>" class="project-banner">
             <?php endif; ?>
             <?php if (!empty($project['description'])): ?>
                 <p><?php echo nl2br(htmlspecialchars($project['description'])); ?></p>

@@ -45,6 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$error && $title === '') {
             $error = 'Title is required.';
         } elseif (!$error) {
+            if (!$is_draft && !$image_filename) {
+                $image_filename = 'Projects Placeholder.png';
+            }
             try {
                 if ($is_featured) {
                     $pdo->exec("UPDATE projects SET is_featured = 0 WHERE is_featured = 1");
@@ -64,9 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // SEO: Set page-specific meta tags
-$page_title = 'Add Project | Jose Veras Portfolio';
-$page_description = 'Add a new project to the Jose Veras portfolio.';
-$page_keywords = 'Add Project, Admin, Jose Veras';
+$page_title = 'Add Project | Jose Veras - Portfolio';
+$page_description = 'Add a new project to Jose Veras\'s System Administrator portfolio.';
+$page_keywords = 'Add Project, Portfolio Admin, Jose Veras';
 
 include __DIR__ . '/../include/header.php';
 ?>

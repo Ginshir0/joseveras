@@ -6,9 +6,9 @@
 require_once __DIR__ . '/config/db.php';
 
 // SEO: Set page-specific meta tags (before including header)
-$page_title = 'Jose Veras - DevOps Portfolio | System Administrator';
-$page_description = 'Welcome to Jose Veras\'s portfolio. A System Administrator transitioning to DevOps, showcasing projects featuring Docker, CI/CD, and cloud infrastructure.';
-$page_keywords = 'Jose Veras, DevOps Portfolio, System Administrator, Docker, CI/CD, Linux, Cloud Infrastructure, IT Projects';
+$page_title = 'Jose Veras - Portfolio | System Administrator';
+$page_description = 'Welcome to Jose Veras\'s portfolio. A System Administrator Passionate about Automation, Problem-Solving, and Continues Learning in IT. Explore projects involving Artificial Intelligence, Linux, Cloud Infrastructure, and more.';
+$page_keywords = 'Jose Veras, Portfolio, System Administrator, Artificial Intelligence, Linux, Cloud Infrastructure, IT Projects';
 
 // Header - includes the opening HTML, head section, and navigation
 include __DIR__ . '/include/header.php'; // Use __DIR__ for reliable path resolution
@@ -43,7 +43,7 @@ try {
     <div class="content-wrapper">
         <h1>This Is My Journey — One Project at a Time.</h1>
         <p>
-            As a System Administrator venturing into the world of DevOps, I'm driven by a passion to understand how things work and a commitment to continuous learning. This space showcases the projects where I turn that curiosity into tangible results, documenting my progress in mastering new skills like Docker, CI/CD, and more, alongside my dedication to fitness pursuits like CrossFit.
+            I am a System Administrator focused on automation, problem-solving, and continuous learning. Here you can explore hands-on work spanning artificial intelligence, Linux, cloud infrastructure, and the DevOps tooling I use to turn ideas into running systems.
         </p>
 
         <blockquote class="motivation-quote">

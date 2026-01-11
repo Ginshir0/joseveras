@@ -36,4 +36,16 @@ CREATE TABLE IF NOT EXISTS `login_attempts` (
     INDEX `idx_ip_time` (`ip_address`, `attempted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Table to track failed login attempts';
 
+-- --- Create Articles Table ---
+-- Stores blog articles with rich text content and slug-based URLs
+CREATE TABLE IF NOT EXISTS `articles` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY COMMENT 'Unique identifier for the article',
+    `title` VARCHAR(255) NOT NULL COMMENT 'Title of the article',
+    `slug` VARCHAR(255) NOT NULL UNIQUE COMMENT 'URL-friendly slug for the article (auto-generated from title)',
+    `content` LONGTEXT NOT NULL COMMENT 'Rich HTML content of the article',
+    `is_draft` BOOLEAN DEFAULT FALSE COMMENT 'When TRUE, article is hidden from public views until published',
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Timestamp when the article was created',
+    `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Timestamp when the article was last updated'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Table to store blog articles';
+
 -- End of initialization script
