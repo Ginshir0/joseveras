@@ -118,6 +118,8 @@ header {
   padding: 20px;
   text-align: center;
   justify-content: center;
+  height: 200px;
+  align-items: center;
 }
 
 #main-nav ul {
@@ -145,6 +147,7 @@ header {
 @media (max-width: 768px) {
   header {
     padding: 15px 10px;
+    height: 150px;
   }
   
   #main-nav ul {
@@ -164,6 +167,7 @@ header {
 @media (max-width: 480px) {
   header {
     padding: 10px 5px;
+    height: 120px;
   }
   
   #main-nav ul {
