@@ -111,23 +111,68 @@ a:hover {
 }
 
 header {
-  background-image: url('../images/homeBanner.svg'); /* Example header image */
-  background-size: cover ;
+  background-image: url('../images/navigationBanner.png'); /* Navigation banner image */
+  background-size: cover;
+  background-position: center;
   display: flex;
   padding: 20px;
   text-align: center;
   justify-content: center;
 }
 
-#main-nav  ul {
+#main-nav ul {
   display: flex;
   list-style: none;
-  gap: 2rem; /* Space between items */
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0;
 }
 
 #main-nav ul li a {
-  font-size: 1.7rem; /* Increase as needed */
-  font-weight: 500;  /* Optional: make links a bit bolder */
+  font-size: 1.7rem;
+  font-weight: 500;
+  white-space: nowrap;
+  padding: 0.3rem 0.5rem;
+  display: inline-block;
+}
+
+/* Tablet responsive navigation */
+@media (max-width: 768px) {
+  header {
+    padding: 15px 10px;
+  }
+  
+  #main-nav ul {
+    gap: 1rem;
+  }
+  
+  #main-nav ul li a {
+    font-size: 1.2rem;
+    padding: 0.5rem 0.3rem;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+/* Mobile responsive navigation */
+@media (max-width: 480px) {
+  header {
+    padding: 10px 5px;
+  }
+  
+  #main-nav ul {
+    gap: 0.5rem;
+  }
+  
+  #main-nav ul li a {
+    font-size: 1rem;
+    padding: 0.5rem 0.2rem;
+    min-height: 44px;
+  }
 }
 
 #main-footer {
