@@ -51,9 +51,7 @@ header("Referrer-Policy: strict-origin-when-cross-origin");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($page_title); ?></title>
-    <!-- TODO: Replace favicon.ico with a transparent PNG and update to: -->
-    <!-- <link rel="icon" type="image/png" href="/images/favicon.png"> -->
-    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="<?php echo htmlspecialchars($page_description); ?>">
