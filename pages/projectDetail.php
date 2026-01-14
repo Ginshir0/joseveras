@@ -1,10 +1,6 @@
 <?php
-require_once __DIR__ . '/../config/auth.php';
-init_session();
-require_once __DIR__ . '/../config/db.php';
-
-// Get project ID from query string
-$project_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+// Get project ID from route parameter
+$project_id = isset($route['id']) ? intval($route['id']) : 0;
 $project = null;
 $db_error = '';
 
@@ -72,7 +68,7 @@ include __DIR__ . '/../include/header.php';
             <?php if (!empty($project['description'])): ?>
                 <p><?php echo nl2br(htmlspecialchars($project['description'])); ?></p>
             <?php endif; ?>
-            <p><a href="/pages/projects.php">&larr; Back to Projects</a></p>
+            <p><a href="/projects">&larr; Back to Projects</a></p>
         <?php endif; ?>
     </div>
 </main>

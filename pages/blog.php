@@ -1,8 +1,4 @@
 <?php
-require_once __DIR__ . '/../config/auth.php';
-init_session();
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../config/helpers.php';
 
 $articles = [];
 $db_error = '';
@@ -52,7 +48,7 @@ include __DIR__ . '/../include/header.php';
 
         <?php if (is_admin()): ?>
             <p style="margin-bottom: 2rem;">
-                <a href="/pages/addArticle.php" class="button">+ Add Article</a>
+                <a href="/addArticle" class="button">+ Add Article</a>
             </p>
         <?php endif; ?>
 
@@ -69,7 +65,7 @@ include __DIR__ . '/../include/header.php';
                         <?php endif; ?>
                         
                         <h2 style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
-                            <a href="/pages/articleDetail.php?slug=<?php echo urlencode($article['slug']); ?>" style="text-decoration: none; color: inherit;">
+                            <a href="/article/<?php echo urlencode($article['slug']); ?>" style="text-decoration: none; color: inherit;">
                                 <?php echo htmlspecialchars($article['title']); ?>
                             </a>
                         </h2>
@@ -86,13 +82,13 @@ include __DIR__ . '/../include/header.php';
                         </p>
 
                         <p>
-                            <a href="/pages/articleDetail.php?slug=<?php echo urlencode($article['slug']); ?>" style="font-weight: bold;">Read More →</a>
+                            <a href="/article/<?php echo urlencode($article['slug']); ?>" style="font-weight: bold;">Read More →</a>
                         </p>
 
                         <?php if (is_admin()): ?>
                             <div style="margin-top: 1rem; display: flex; gap: 1rem;">
-                                <a href="/pages/editArticle.php?slug=<?php echo urlencode($article['slug']); ?>" class="button" style="background: #555; color: white; font-size: 0.9rem; padding: 0.5rem 1rem;">Edit</a>
-                                <form method="post" action="/pages/deleteArticle.php" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this article?');">
+                                <a href="/editArticle/<?php echo urlencode($article['slug']); ?>" class="button" style="background: #555; color: white; font-size: 0.9rem; padding: 0.5rem 1rem;">Edit</a>
+                                <form method="post" action="/deleteArticle" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this article?');">
                                     <?php echo csrf_field(); ?>
                                     <input type="hidden" name="id" value="<?php echo $article['id']; ?>">
                                     <button type="submit" class="button" style="background: #b80000; color: white; font-size: 0.9rem; padding: 0.5rem 1rem;">Delete</button>

@@ -2,10 +2,6 @@
 // pages/logout.php
 // Handle admin logout
 
-require_once __DIR__ . '/../config/auth.php';
-
-init_session();
-
 // Clear all session data
 $_SESSION = [];
 
@@ -27,5 +23,5 @@ if (ini_get('session.use_cookies')) {
 session_destroy();
 
 // Redirect to home page
-header('Location: /index.php');
+header('Location: /home');
 exit;

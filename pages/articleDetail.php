@@ -1,12 +1,6 @@
 <?php
-require_once __DIR__ . '/../config/auth.php';
-init_session();
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../config/csrf.php';
-require_once __DIR__ . '/../config/helpers.php';
-
-// Get article slug from query string
-$article_slug = isset($_GET['slug']) ? trim($_GET['slug']) : '';
+// Get article slug from route parameter
+$article_slug = isset($route['slug']) ? trim($route['slug']) : '';
 $article = null;
 $db_error = '';
 
@@ -81,8 +75,8 @@ include __DIR__ . '/../include/header.php';
 
             <?php if (is_admin()): ?>
                 <div class="project-admin-actions" style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
-                    <a href="/pages/editArticle.php?slug=<?php echo urlencode($article['slug']); ?>" class="button">Edit</a>
-                    <form method="post" action="/pages/deleteArticle.php" onsubmit="return confirm('Are you sure you want to delete this article?');">
+                    <a href="/editArticle/<?php echo urlencode($article['slug']); ?>" class="button">Edit</a>
+                    <form method="post" action="/deleteArticle" onsubmit="return confirm('Are you sure you want to delete this article?');">
                         <?php echo csrf_field(); ?>
                         <input type="hidden" name="id" value="<?php echo $article['id']; ?>">
                         <button type="submit" class="button button--danger">Delete</button>
@@ -90,7 +84,7 @@ include __DIR__ . '/../include/header.php';
                 </div>
             <?php endif; ?>
 
-            <p style="margin-top: 2rem;"><a href="/pages/blog.php">&larr; Back to Blog</a></p>
+            <p style="margin-top: 2rem;"><a href="/blog">&larr; Back to Blog</a></p>
         <?php endif; ?>
     </div>
 </main>

@@ -1,11 +1,4 @@
 <?php
-require_once __DIR__ . '/../config/auth.php';
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../config/csrf.php';
-require_once __DIR__ . '/../config/upload.php';
-
-require_admin();
-
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -56,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute([$title, $description, $image_filename, $is_featured, $is_draft]);
                 $flash_message = $is_draft ? 'Project saved as draft.' : 'Project published successfully.';
                 set_flash('success', $flash_message);
-                header('Location: /pages/projects.php');
+                header('Location: /projects');
                 exit;
             } catch (PDOException $e) {
                 error_log("Add project error: " . $e->getMessage());
@@ -103,7 +96,7 @@ include __DIR__ . '/../include/header.php';
                 <button type="submit" name="action" value="publish" class="button">Publish</button>
             </div>
         </form>
-        <p style="margin-top:1rem;"><a href="/pages/projects.php">&larr; Back to Projects</a></p>
+        <p style="margin-top:1rem;"><a href="/projects">&larr; Back to Projects</a></p>
     </div>
 </main>
 

@@ -2,15 +2,9 @@
 // pages/setup.php
 // Initial admin setup page - only accessible when no admin users exist
 
-require_once __DIR__ . '/../config/auth.php';
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../config/csrf.php';
-
-init_session();
-
 // Lock setup page if an admin already exists
 if (!is_setup_required($pdo)) {
-    header('Location: /pages/adminSignIn.php');
+    header('Location: /login');
     exit;
 }
 
@@ -69,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     // Set success message and redirect
                     set_flash('success', 'Admin account created successfully. Welcome!');
-                    header('Location: /pages/projects.php');
+                    header('Location: /projects');
                     exit;
                 } catch (PDOException $e) {
                     error_log("Failed to create admin: " . $e->getMessage());

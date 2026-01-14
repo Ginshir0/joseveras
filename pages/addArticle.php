@@ -1,11 +1,4 @@
 <?php
-require_once __DIR__ . '/../config/auth.php';
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../config/csrf.php';
-require_once __DIR__ . '/../config/helpers.php';
-
-require_admin();
-
 $error = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -42,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $flash_message = $is_draft ? 'Article saved as draft.' : 'Article published successfully.';
                 set_flash('success', $flash_message);
-                header('Location: /pages/blog.php');
+                header('Location: /blog');
                 exit;
             } catch (PDOException $e) {
                 error_log("Add article error: " . $e->getMessage());
@@ -85,7 +78,7 @@ include __DIR__ . '/../include/header.php';
                 <button type="submit" name="action" value="publish" class="button">Publish</button>
             </div>
         </form>
-        <p style="margin-top:1rem;"><a href="/pages/blog.php">&larr; Back to Blog</a></p>
+        <p style="margin-top:1rem;"><a href="/blog">&larr; Back to Blog</a></p>
     </div>
 </main>
 

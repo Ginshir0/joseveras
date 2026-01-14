@@ -1,12 +1,5 @@
 <?php
-require_once __DIR__ . '/../config/auth.php';
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../config/csrf.php';
-require_once __DIR__ . '/../config/helpers.php';
-
-require_admin();
-
-$article_slug = isset($_GET['slug']) ? trim($_GET['slug']) : '';
+$article_slug = isset($route['slug']) ? trim($route['slug']) : '';
 $error = '';
 $article = null;
 
@@ -53,7 +46,7 @@ if ($article_slug) {
 
                         $flash_message = $is_draft ? 'Article saved as draft.' : 'Article updated and published.';
                         set_flash('success', $flash_message);
-                        header('Location: /pages/articleDetail.php?slug=' . urlencode($slug));
+                        header('Location: /article/' . urlencode($slug));
                         exit;
                     } else {
                         $error = 'Article not found.';
@@ -118,7 +111,7 @@ include __DIR__ . '/../include/header.php';
                 </div>
             </form>
         <?php endif; ?>
-        <p style="margin-top:1rem;"><a href="/pages/blog.php">&larr; Back to Blog</a></p>
+        <p style="margin-top:1rem;"><a href="/blog">&larr; Back to Blog</a></p>
     </div>
 </main>
 

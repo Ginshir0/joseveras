@@ -1,15 +1,9 @@
 <?php
-require_once __DIR__ . '/../config/auth.php';
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../config/csrf.php';
-
-require_admin();
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     // Verify CSRF token before processing delete
     if (!csrf_verify()) {
         set_flash('error', 'Invalid request. Please try again.');
-        header('Location: /pages/blog.php');
+        header('Location: /blog');
         exit;
     }
     
@@ -27,5 +21,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
         }
     }
 }
-header('Location: /pages/blog.php');
+header('Location: /blog');
 exit;

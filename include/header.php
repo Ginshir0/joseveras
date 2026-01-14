@@ -1,22 +1,8 @@
 <?php
-// Initialize session with secure settings before output
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../config/auth.php';
-init_session();
-
 // Production HTTPS redirect using X-Forwarded-Proto header (Railway/proxy)
 if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] !== 'https') {
     $redirect_url = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
     header('Location: ' . $redirect_url, true, 301);
-    exit;
-}
-
-// Check if initial setup is required (no admin users exist)
-// Redirect to setup page if needed (but not if already on setup page)
-
-$current_page = basename($_SERVER['PHP_SELF']);
-if ($current_page !== 'setup.php' && is_setup_required($pdo)) {
-    header('Location: /pages/setup.php');
     exit;
 }
 
@@ -34,10 +20,8 @@ $page_robots = isset($page_robots) ? $page_robots : 'index, follow';
 
 // Build canonical URL
 $canonical_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-// Remove query string for cleaner canonical (except for detail pages)
-if (strpos($current_page, 'Detail') === false) {
-    $canonical_url = strtok($canonical_url, '?');
-}
+// Remove query string for cleaner canonical (always strip since we use clean URLs)
+$canonical_url = strtok($canonical_url, '?');
 
 // Security Headers - must be sent before any output
 header("Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none';");
@@ -116,15 +100,15 @@ header("Referrer-Policy: strict-origin-when-cross-origin");
     <header>
         <nav id="main-nav">
             <ul>
-                <li><a href="/index.php">Home</a></li>
-                <li><a href="/pages/projects.php">Projects</a></li>
-                <li><a href="/pages/blog.php">Blog</a></li>
+                <li><a href="/home">Home</a></li>
+                <li><a href="/projects">Projects</a></li>
+                <li><a href="/blog">Blog</a></li>
                 <li><a href="https://resume.joseveras.com" target="_blank" rel="noopener noreferrer">Resume</a></li>
-                <li><a href="/pages/about.php">About</a></li>
+                <li><a href="/about">About</a></li>
                 <?php
                 // Show logout link if admin is logged in
                 if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
-                    echo '<li><a href="/pages/logout.php">Logout</a></li>';
+                    echo '<li><a href="/logout">Logout</a></li>';
                 }
                 ?>
             </ul>

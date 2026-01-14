@@ -1,7 +1,4 @@
 <?php
-require_once __DIR__ . '/../config/auth.php';
-init_session();
-
 // SEO: Set page-specific meta tags
 $page_title = 'About | Jose Veras - Portfolio';
 $page_description = 'Learn about Jose Veras, a System Administrator with a passion for automation, problem-solving, and continuous learning in IT. Explore technical excellence across AI, Linux, and cloud infrastructure.';

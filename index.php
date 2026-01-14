@@ -1,115 +1,80 @@
 <?php
-// index.php - The main homepage for the portfolio website.
+/**
+ * index.php - Front Controller
+ * 
+ * Entry point for all requests. Routes clean URLs to appropriate page files.
+ * Centralizes configuration, session management, and authentication.
+ */
 
-// Include necessary files
-// Database configuration - needed to fetch the featured project
+// Initialize all configurations and session
 require_once __DIR__ . '/config/db.php';
+require_once __DIR__ . '/config/auth.php';
+require_once __DIR__ . '/config/csrf.php';
+require_once __DIR__ . '/config/helpers.php';
+require_once __DIR__ . '/config/router.php';
 
-// SEO: Set page-specific meta tags (before including header)
-$page_title = 'Jose Veras - Portfolio | System Administrator';
-$page_description = 'Welcome to Jose Veras\'s portfolio. A System Administrator Passionate about Automation, Problem-Solving, and Continues Learning in IT. Explore projects involving Artificial Intelligence, Linux, Cloud Infrastructure, and more.';
-$page_keywords = 'Jose Veras, Portfolio, System Administrator, Artificial Intelligence, Linux, Cloud Infrastructure, IT Projects';
+// Initialize session with secure settings
+init_session();
 
-// Header - includes the opening HTML, head section, and navigation
-include __DIR__ . '/include/header.php'; // Use __DIR__ for reliable path resolution
+// Check if initial setup is required (no admin users exist)
+// Redirect to setup page if needed (but not if already on setup page)
+$request_uri = $_SERVER['REQUEST_URI'];
+$normalized_uri = strtok($request_uri, '?');
+$normalized_uri = rtrim($normalized_uri, '/');
 
-// --- Fetch Featured Project ---
-$featured_project = null; // Initialize variable
-$db_error = '';         // Initialize error message
-
-try {
-    // Prepare and execute the query to find one project marked as featured
-    // Ordering by updated_at DESC to get the most recently updated featured project if multiple exist
-    $stmt = $pdo->prepare("SELECT id, title, description, image_url
-                           FROM projects
-                           WHERE is_featured = TRUE AND is_draft = FALSE
-                           ORDER BY updated_at DESC
-                           LIMIT 1");
-    $stmt->execute();
-
-    // Fetch the featured project if found
-    $featured_project = $stmt->fetch(PDO::FETCH_ASSOC);
-
-} catch (PDOException $e) {
-    // Log the error securely in a real application
-    error_log("Homepage - Error fetching featured project: " . $e->getMessage());
-    // Set a user-friendly error message (optional, could also just hide the section)
-    $db_error = "Could not load the featured project at this time.";
+if ($normalized_uri !== '/setup' && is_setup_required($pdo)) {
+    header('Location: /setup');
+    exit;
 }
 
-?>
+// Get the request URI
+$request_uri = $_SERVER['REQUEST_URI'];
 
-<main>
-    <div class="content-wrapper">
-        <h1>This Is My Journey — One Project at a Time.</h1>
-        <p>
-            I am a System Administrator focused on automation, problem-solving, and continuous learning. Here you can explore hands-on work spanning artificial intelligence, Linux, cloud infrastructure, and the DevOps tooling I use to turn ideas into running systems.
-        </p>
+// Initialize the router
+$router = new Router($request_uri);
 
-        <blockquote class="motivation-quote">
-            <?php
-            // --- Rotating Quotes (Simple Example) ---
-            $quotes = [
-                ['text' => "The journey of a thousand miles begins with a single step.", 'author' => "Lao Tzu"],
-                ['text' => "The only way to do great work is to love what you do.", 'author' => "Steve Jobs"],
-                ['text' => "Success is not final, failure is not fatal: It is the courage to continue that counts.", 'author' => "Winston Churchill"],
-                ['text' => "Whether you think you can or think you can’t, you’re right.", 'author' => "Henry Ford"],
-                ['text' => "Out of every one-hundred men, ten shouldn’t even be there, eighty are just targets, nine are the real fighters, and we are lucky to have them, for they make the battle. Ah, but the one, one is a warrior and he will bring the others back.", 'author' => "Heraclitus"]
-            ];
-            // Select a random quote
-            $random_quote = $quotes[array_rand($quotes)];
-            ?>
-            <p>"<?php echo htmlspecialchars($random_quote['text']); ?>"</p>
-            <footer>— <?php echo htmlspecialchars($random_quote['author']); ?></footer>
-        </blockquote>
+// Match the route
+$route = $router->match();
 
-        <section id="featured-project">
-            <h2>Featured Project</h2>
+// Handle no match (404)
+if ($route === null) {
+    http_response_code(404);
+    $route = [
+        'file' => 'pages/404.php',
+        'params' => [],
+        'requires_admin' => false
+    ];
+}
 
-            <?php if ($db_error): ?>
-                <p class="error-message"><?php echo htmlspecialchars($db_error); ?></p>
-            <?php elseif ($featured_project): ?>
-                <?php // Link the entire featured block to the projects page (or specific detail page) ?>
-                <?php // Using projectDetail.php?id=... assumes you have this page set up ?>
-                <a href="/pages/projectDetail.php?id=<?php echo htmlspecialchars($featured_project['id']); ?>" class="featured-project-link">
-                    <article>
-                        <?php if (!empty($featured_project['image_url'])): ?>
-                            <?php // Use /uploads/{image_url} for image path ?>
-                            <img src="/uploads/<?php echo htmlspecialchars($featured_project['image_url']); ?>"
-                                alt="Screenshot or logo for <?php echo htmlspecialchars($featured_project['title']); ?>"
-                                style="max-width: 100%; height: auto; margin-bottom: 15px; border-radius: 8px;">
-                        <?php endif; ?>
+// Handle redirects (e.g., root to /home)
+if (isset($route['redirect'])) {
+    http_response_code($route['code'] ?? 302);
+    header('Location: ' . $route['redirect']);
+    exit;
+}
 
-                        <h3><?php echo htmlspecialchars($featured_project['title']); ?></h3>
+// Authentication middleware - check if route requires admin access
+if ($route['requires_admin']) {
+    require_admin(); // Will redirect to login or show 403 if not authorized
+}
 
-                        <?php if (!empty($featured_project['description'])): ?>
-                            <p>
-                                <?php echo nl2br(htmlspecialchars(substr($featured_project['description'], 0, 200))); // Show first 200 chars ?>
-                                <?php if (strlen($featured_project['description']) > 200) echo '...'; ?>
-                            </p>
-                        <?php endif; ?>
+// Extract route parameters as variables for page access
+// This allows pages to use $route['id'], $route['slug'], etc.
+$route_params = $route['params'] ?? [];
 
-                        <?php /* Specific links removed as the whole block is clickable */ ?>
-                    </article>
-                </a>
-                <?php // Link to see all projects ?>
-                <p style="text-align: center; margin-top: 20px;">
-                    <a href="/pages/projects.php" style="font-weight: bold;">See All Projects &rarr;</a>
-                </p>
+// For backward compatibility, also make individual variables available
+foreach ($route_params as $key => $value) {
+    $$key = $value;
+}
 
-            <?php else: ?>
-                <p class="info-message">No featured project selected yet. Check back soon!</p>
-                <?php // Link to see all projects even if none featured ?>
-                <p style="text-align: center; margin-top: 20px;">
-                    <a href="/pages/projects.php" style="font-weight: bold;">See All Projects &rarr;</a>
-                </p>
-            <?php endif; ?>
+// Include the target page file
+$page_file = __DIR__ . '/' . $route['file'];
 
-        </section> <?php // End #featured-project ?>
-    </div>
-</main>
-
-<?php
-// Include the footer - includes the closing body and html tags
-include __DIR__ . '/include/footer.php';
-?>
+if (file_exists($page_file)) {
+    include $page_file;
+} else {
+    // Page file not found - show 404
+    error_log("Router: Page file not found: " . $page_file);
+    http_response_code(404);
+    include __DIR__ . '/pages/404.php';
+}

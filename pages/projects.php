@@ -1,10 +1,4 @@
 <?php
-require_once __DIR__ . '/../config/auth.php';
-require_once __DIR__ . '/../config/db.php';
-require_once __DIR__ . '/../config/csrf.php';
-
-init_session();
-
 // SEO: Set page-specific meta tags
 $page_title = 'Projects | Jose Veras - Portfolio';
 $page_description = 'Browse Jose Veras\'s System Administration projects. Explore hands-on work with Artificial Intelligence, Linux, Cloud Infrastructure, and automation.';
@@ -34,7 +28,7 @@ try {
         <?php echo render_flash(); ?>
         <?php if (is_admin()): ?>
             <div style="margin-bottom: 2rem;">
-                <a href="/pages/addProject.php" class="button">Add Project</a>
+                <a href="/addProject" class="button">Add Project</a>
             </div>
         <?php endif; ?>
         <?php if ($db_error): ?>
@@ -54,7 +48,7 @@ try {
                         <?php if (is_admin() && $isDraft): ?>
                             <span class="badge badge-draft">Draft</span>
                         <?php endif; ?>
-                        <a href="/pages/projectDetail.php?id=<?php echo htmlspecialchars($project['id']); ?>" class="project-card">
+                        <a href="/project/<?php echo htmlspecialchars($project['id']); ?>" class="project-card">
                             <?php if ($displayImage): ?>
                                 <img src="<?php echo $isPlaceholder ? '/images/Projects%20Placeholder.png' : '/uploads/' . htmlspecialchars($displayImage); ?>" alt="<?php echo htmlspecialchars($project['title']); ?>">
                             <?php endif; ?>
@@ -65,8 +59,8 @@ try {
                         </a>
                         <?php if (is_admin()): ?>
                             <div class="project-admin-actions">
-                                <a href="/pages/editProject.php?id=<?php echo htmlspecialchars($project['id']); ?>" class="button">Edit</a>
-                                <form method="post" action="/pages/deleteProject.php" onsubmit="return confirm('Are you sure you want to delete this project?');">
+                                <a href="/editProject/<?php echo htmlspecialchars($project['id']); ?>" class="button">Edit</a>
+                                <form method="post" action="/deleteProject" onsubmit="return confirm('Are you sure you want to delete this project?');">
                                     <?php echo csrf_field(); ?>
                                     <input type="hidden" name="id" value="<?php echo htmlspecialchars($project['id']); ?>">
                                     <button type="submit" class="button button--danger">Delete</button>
