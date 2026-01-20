@@ -49,7 +49,8 @@ include __DIR__ . '/../include/header.php';
                 ['text' => "The only way to do great work is to love what you do.", 'author' => "Steve Jobs"],
                 ['text' => "Success is not final, failure is not fatal: It is the courage to continue that counts.", 'author' => "Winston Churchill"],
                 ['text' => "Whether you think you can or think you can't, you're right.", 'author' => "Henry Ford"],
-                ['text' => "Out of every one-hundred men, ten shouldn't even be there, eighty are just targets, nine are the real fighters, and we are lucky to have them, for they make the battle. Ah, but the one, one is a warrior and he will bring the others back.", 'author' => "Heraclitus"]
+                ['text' => "Out of every one-hundred men, ten shouldn't even be there, eighty are just targets, nine are the real fighters, and we are lucky to have them, for they make the battle. Ah, but the one, one is a warrior and he will bring the others back.", 'author' => "Heraclitus"],
+                ['text' => "If you can't fly, then run; if you can't run, then walk; if you can't walk, then crawl, but whatever you do, you have to keep moving forward.", 'author' => "Martin Luther King Jr."]
             ];
             // Select a random quote
             $random_quote = $quotes[array_rand($quotes)];
